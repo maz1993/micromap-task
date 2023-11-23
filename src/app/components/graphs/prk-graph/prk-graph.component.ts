@@ -70,7 +70,7 @@ export class PrkGraphComponent {
       this.createChart()
     }
         
-      }, 250);
+      }, 1000);
 
     
   }

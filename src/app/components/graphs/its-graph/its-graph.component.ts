@@ -69,7 +69,7 @@ export class ItsGraphComponent implements OnInit, OnDestroy {
    
     }
         
-      }, 250);
+      }, 1000);
   }
 
 
