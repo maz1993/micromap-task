@@ -73,7 +73,7 @@ export class RowGraphComponent implements OnInit{
       this.createChart()
     }
         
-      }, 100);
+      }, 250);
 
     
   }

@@ -64,7 +64,9 @@ export class ItsGraphComponent implements OnInit, OnDestroy {
         }
     }
       console.log('data', this.props )
-      this.createChart()
+     
+        this.createChart()
+   
     }
         
       }, 250);

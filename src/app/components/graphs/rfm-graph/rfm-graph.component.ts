@@ -70,7 +70,7 @@ export class RfmGraphComponent {
       this.createChart()
     }
         
-      }, 100);
+      }, 250);
 
     
   }
