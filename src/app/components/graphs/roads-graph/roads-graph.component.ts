@@ -70,7 +70,7 @@ export class RoadsGraphComponent {
       this.createChart()
     }
         
-      }, 250);
+      }, 1000);
 
     
   }

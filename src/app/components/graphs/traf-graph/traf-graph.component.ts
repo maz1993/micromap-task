@@ -70,7 +70,7 @@ export class TrafGraphComponent {
       this.createChart()
     }
         
-      }, 250);
+      }, 1000);
 
     
   }
