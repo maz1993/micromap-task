@@ -41,8 +41,10 @@ export class PrkGraphComponent {
       setTimeout(() => {
         if(localStorage.getItem('excelData'))
     {
+      
       const abc = localStorage.getItem('excelData') as string
       this.graphData = JSON.parse(abc)
+      console.log('for checking', this.graphData)
       this.props = this.graphData[2]
 
       const dataArray1 = this.props['Existing Features Updated from 4 July 2022 Untill 26 September 2023']
