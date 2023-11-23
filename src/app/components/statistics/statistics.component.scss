@@ -1,13 +1,11 @@
-
 .header{
     background: #0092D6;
     height: 50px;
     min-width: 50px;
     .heading{
-        font-size: 20px;
+        font-size: 13px;
         margin-left: 15px; 
         font-weight: 500;
-        color: #fff;
     }
 }
 
@@ -15,6 +13,7 @@
     height: calc(100% - 50px);
     // border: 2px solid yellow;
     overflow-y: auto;
+    font-family: "Manrope",  sans-serif;
     .department-overview{
         .dpt-Info{
             background: #ABB2B9;
@@ -103,13 +102,13 @@ p{
     // border-top: 1px solid #0072A7;
     .heading{
         color: #0072A7;
-        font-size: 17px;
+        font-size: 14px;
         font-weight: 500;
     }
     .count{
         color: #0072A7;
-        font-size: 25px;
-        font-weight: 500;
+        font-size: 28px;
+        font-weight: 600;
     }
 }
 
@@ -129,4 +128,17 @@ p{
     color: #fff;
     font-size: 12px;
     background: #24B8FD;
+}
+
+.legend{
+    margin-left: 10px;
+    width: 15px;    
+    height: 15px;
+    // background-color: #000 ;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.c-total{
+    font-size: 13px;
 }
