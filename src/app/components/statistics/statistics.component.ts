@@ -337,6 +337,21 @@ export class StatisticsComponent {
     return colors[index % colors.length];
   }
 
+  getlegendColor(index: number): string 
+  {
+    const colors = [
+      '#5DADE2',
+      
+      '#5BCBFF',
+      '#24B8FD',
+      
+      '#0092D6',
+      '#0072A7',
+      '#004F74',
+    ];
+    return colors[index % colors.length];
+  }
+
   getObjectKeys(obj: any): string[] {
     if (obj) {
       return Object.keys(obj);
