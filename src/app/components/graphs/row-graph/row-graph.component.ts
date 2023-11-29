@@ -10,8 +10,8 @@ import { RowGraph } from 'src/app/models';
   templateUrl: './row-graph.component.html',
   styleUrls: ['./row-graph.component.scss']
 })
-export class RowGraphComponent implements OnInit{
-  props!: any
+export class RowGraphComponent implements OnInit, OnChanges{
+  @Input() props!: any
 
   graphData:any
 
@@ -36,27 +36,18 @@ export class RowGraphComponent implements OnInit{
     this.rowData6 = [];
     
   }
-
-
-  ngOnInit(): void {
-    // if(this.props)
-    // {
-      setTimeout(() => {
-        if(localStorage.getItem('excelData'))
+  ngOnChanges(changes: SimpleChanges): void {
+    // throw new Error('Method not implemented.');
+    console.log('data from statistics comp', this.props)
+    if(this.props)
     {
-      const abc = localStorage.getItem('excelData') as string
-      this.graphData = JSON.parse(abc)
-      this.props = this.graphData[0]
-
       const dataArray1 = this.props['Existing Features Updated from 4 July 2022 Untill 26 September 2023']
       const dataArray2 = this.props['New Features created from 4 July 2022 Untill 26 September 2023']
-      const originalArray1 = this.props['Total Feature Count Untill 3 July 2022']
-      const dataArray3 = originalArray1.map((element:any) => (element === '-' ? 0 : element));
+      const dataArray3 = this.props['Total Feature Count Untill 3 July 2022']
       const dataArray4 = this.props['Total Feature Count Untill 30 June 2023']
       const dataArray5 = this.props['Total Feature Count Untill 30 September 2023']
-      const originalArray2 = this.props['Total Feature Count Untill 31 March 2023'];
-      const dataArray6 = originalArray2.map((element:any) => (element === '-' ? 0 : element));
-      const label = this.props['Feature Class Name'];
+      const dataArray6 = this.props['Total Feature Count Untill 31 March 2023'];
+      const label = this.props.sections;
 
       for (let i = 0; i < dataArray1.length; i++) {
         if (dataArray1[i] > 0 || dataArray2[i] > 0 || dataArray3[i] > 0 ||  dataArray4[i] > 0 || dataArray5[i] > 0 || dataArray6[i] > 0) {
@@ -66,17 +57,19 @@ export class RowGraphComponent implements OnInit{
           this.rowData4.push(dataArray4[i]);
           this.rowData5.push(dataArray5[i]);
           this.rowData6.push(dataArray6[i]);
-          this.rowBarLabel.push(label[i]);
+          this.rowBarLabel.push(label[i].name);
         }
     }
-      console.log('data', this.props )
-      this.createChart()
-    }
-        
-      }, 1000);
 
-    
-  }
+     this.createChart()
+    }
+    }
+  
+
+
+  ngOnInit(): void { }
+
+
 
 
 
@@ -86,64 +79,50 @@ export class RowGraphComponent implements OnInit{
       labels: this.rowBarLabel,
       datasets: [
         {
-          label: 'Updated Count Untill 3 July 2022',
+          label: 'Updated Untill 3 July 2022',
           data: this.rowData1,
-          backgroundColor: ['#5DADE2'],
-          barPercentage: 1,
-          hoverBackgroundColor: ['#5DADE2'],
-          categoryPercentage: 0.5,
-          barThickness: 6,
-          borderRadius: 10
+          backgroundColor: ['#FCDA8C'],
+          hoverBackgroundColor: ['#FCDA8C'],
+          barThickness: 8,
         },
         {
-          label: 'Created Count Untill 31 March 2023',
+          label: 'Created Untill 31 March 2023',
           data: this.rowData2,
-          backgroundColor: ['#5BCBFF'],
-          barPercentage: 1,
-          hoverBackgroundColor: ['#5BCBFF'],
-          categoryPercentage: 0.5,
-          barThickness: 6,
-          borderRadius: 10
+          backgroundColor: ['#F5B391'],
+          hoverBackgroundColor: ['#F5B391'],
+          barThickness: 8,
         },
         {
-          label: 'Count Untill 30 June 2023',
+          label: 'Untill 3 July 2022',
           data: this.rowData3,
-          backgroundColor: ['#24B8FD'],
-          barPercentage: 1,
-          hoverBackgroundColor: ['#24B8FD'],
+          backgroundColor: ['#DD9AA9'],
+          hoverBackgroundColor: ['#DD9AA9'],
           categoryPercentage: 0.5,
-          barThickness: 6,
-          borderRadius: 10
+          barThickness: 8,
         },
         {
-          label: 'Count Untill 30 September 2023',
+          label: 'Untill 30 June 2023',
           data: this.rowData4,
-          backgroundColor: ['#0092D6'],
-          barPercentage: 1,
-          hoverBackgroundColor: ['#0092D6'],
+          backgroundColor: ['#BB8DB5'],
+          hoverBackgroundColor: ['#BB8DB5'],
           categoryPercentage: 0.5,
-          barThickness: 6,
-          borderRadius: 10
+          barThickness: 8,
         },
         {
-          label: 'Count Untill 30 September 2023',
+          label: 'Untill 30 September 2023',
           data: this.rowData5,
-          backgroundColor: ['#0072A7'],
-          barPercentage: 1,
-          hoverBackgroundColor: ['#0072A7'],
+          backgroundColor: ['#9884AE'],
+          hoverBackgroundColor: ['#9884AE'],
           categoryPercentage: 0.5,
           barThickness: 6,
-          borderRadius: 10
         },
         {
-          label: 'Count Untill 30 September 2023',
+          label: 'Untill 31 March 2023',
           data: this.rowData6,
-          backgroundColor: ['#004F74'],
-          barPercentage: 1,
-          hoverBackgroundColor: ['#004F74'],
+          backgroundColor: ['#7F7F81'],
+          hoverBackgroundColor: ['#7F7F81'],
           categoryPercentage: 0.5,
           barThickness: 6,
-          borderRadius: 10
         },
         
       ],
@@ -155,7 +134,7 @@ export class RowGraphComponent implements OnInit{
       data,
       options: {
         // aspectRatio:2.5,
-        indexAxis: 'y',
+        indexAxis: 'x',
         maintainAspectRatio: false,
 
         plugins: {
@@ -188,8 +167,9 @@ export class RowGraphComponent implements OnInit{
             },
             callbacks: {
               label: (tooltipItem: any): any => {
+                let labelKey = tooltipItem.dataset.label
                 let label = tooltipItem.dataset.data[tooltipItem.dataIndex];
-                return 'Feature Count' + ' ' + label;
+                return labelKey + ': ' + label;
               },
             },
           },

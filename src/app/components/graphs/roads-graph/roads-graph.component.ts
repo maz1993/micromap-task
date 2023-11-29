@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges, OnChanges } from '@angular/core';
 import { Chart } from 'chart.js';
 
 @Component({
@@ -6,9 +6,9 @@ import { Chart } from 'chart.js';
   templateUrl: './roads-graph.component.html',
   styleUrls: ['./roads-graph.component.scss']
 })
-export class RoadsGraphComponent {
+export class RoadsGraphComponent implements OnInit, OnChanges {
 
-  props!: any
+  @Input() props!: any
 
   graphData:any
 
@@ -35,25 +35,20 @@ export class RoadsGraphComponent {
   }
 
 
-  ngOnInit(): void {
-    // if(this.props)
-    // {
-      setTimeout(() => {
-        if(localStorage.getItem('excelData'))
-    {
-      const abc = localStorage.getItem('excelData') as string
-      this.graphData = JSON.parse(abc)
-      this.props = this.graphData[4]
+  ngOnInit(): void {}
 
+  ngOnChanges(changes: SimpleChanges): void {
+    // throw new Error('Method not implemented.');
+    console.log('data from statistics comp', this.props)
+    if(this.props)
+    {
       const dataArray1 = this.props['Existing Features Updated from 4 July 2022 Untill 26 September 2023']
       const dataArray2 = this.props['New Features created from 4 July 2022 Untill 26 September 2023']
-      const originalArray1 = this.props['Total Feature Count Untill 3 July 2022']
-      const dataArray3 = originalArray1.map((element:any) => (element === '-' ? 0 : element));
+      const dataArray3 = this.props['Total Feature Count Untill 3 July 2022']
       const dataArray4 = this.props['Total Feature Count Untill 30 June 2023']
       const dataArray5 = this.props['Total Feature Count Untill 30 September 2023']
-      const originalArray2 = this.props['Total Feature Count Untill 31 March 2023'];
-      const dataArray6 = originalArray2.map((element:any) => (element === '-' ? 0 : element));
-      const label = this.props['Feature Class Name'];
+      const dataArray6 = this.props['Total Feature Count Untill 31 March 2023'];
+      const label = this.props.sections;
 
       for (let i = 0; i < dataArray1.length; i++) {
         if (dataArray1[i] > 0 || dataArray2[i] > 0 || dataArray3[i] > 0 ||  dataArray4[i] > 0 || dataArray5[i] > 0 || dataArray6[i] > 0) {
@@ -63,196 +58,95 @@ export class RoadsGraphComponent {
           this.rowData4.push(dataArray4[i]);
           this.rowData5.push(dataArray5[i]);
           this.rowData6.push(dataArray6[i]);
-          this.rowBarLabel.push(label[i]);
+          this.rowBarLabel.push(label[i].name);
         }
     }
-      console.log('data', this.props )
-      this.createChart()
+
+    this.graphData = [ this.rowData3[0], this.rowData4[0], this.rowData5[0], this.rowData6[0], this.rowData1[0], this.rowData2[0], ]
+    this.rowBarLabel = [this.rowBarLabel[0], this.rowBarLabel[0], this.rowBarLabel[0], this.rowBarLabel[0], this.rowBarLabel[0], this.rowBarLabel[0], ]
+    console.log('rrrrrr', this.rowBarLabel)
+
+     this.chartInIt()
     }
-        
-      }, 1000);
-
-    
-  }
+    }
 
 
 
-  createChart() {
-    let data: any;
-    data = {
-      labels: this.rowBarLabel,
-      datasets: [
-        {
-          label: 'Updated Count Untill 3 July 2022',
-          data: this.rowData1,
-          backgroundColor: ['#5DADE2'],
-          barPercentage: 1,
-          hoverBackgroundColor: ['#5DADE2'],
-          categoryPercentage: 0.5,
-          barThickness: 6,
-          borderRadius: 10
-        },
-        {
-          label: 'Created Count Untill 31 March 2023',
-          data: this.rowData2,
-          backgroundColor: ['#5BCBFF'],
-          barPercentage: 1,
-          hoverBackgroundColor: ['#5BCBFF'],
-          categoryPercentage: 0.5,
-          barThickness: 6,
-          borderRadius: 10
-        },
-        {
-          label: 'Count Untill 30 June 2023',
-          data: this.rowData3,
-          backgroundColor: ['#24B8FD'],
-          barPercentage: 1,
-          hoverBackgroundColor: ['#24B8FD'],
-          categoryPercentage: 0.5,
-          barThickness: 6,
-          borderRadius: 10
-        },
-        {
-          label: 'Count Untill 30 September 2023',
-          data: this.rowData4,
-          backgroundColor: ['#0092D6'],
-          barPercentage: 1,
-          hoverBackgroundColor: ['#0092D6'],
-          categoryPercentage: 0.5,
-          barThickness: 6,
-          borderRadius: 10
-        },
-        {
-          label: 'Count Untill 30 September 2023',
-          data: this.rowData5,
-          backgroundColor: ['#0072A7'],
-          barPercentage: 1,
-          hoverBackgroundColor: ['#0072A7'],
-          categoryPercentage: 0.5,
-          barThickness: 6,
-          borderRadius: 10
-        },
-        {
-          label: 'Count Untill 30 September 2023',
-          data: this.rowData6,
-          backgroundColor: ['#004F74'],
-          barPercentage: 1,
-          hoverBackgroundColor: ['#004F74'],
-          categoryPercentage: 0.5,
-          barThickness: 6,
-          borderRadius: 10
-        },
-        
-      ],
-    // };
-  }
-
-    const config: any = {
-      type: 'bar', 
-      data,
-      options: {
-        // aspectRatio:2.5,
-        indexAxis: 'y',
-        maintainAspectRatio: false,
-
-        plugins: {
-          legend: {
-            display: false,
-            position: 'bottom',
+    chartInIt() {
+      let data: any;
+       data = {
+        labels: this.rowBarLabel,
+        datasets: [{
+          label: 'My First Dataset',
+          data: this.graphData,
+          backgroundColor: [
+            
+            '#BB8DB5',
+            '#9884AE',
+            '#F5B391',
+            '#FCDA8C',
+            '#DD9AA9',
+            '#7F7F81',
+          ],
+          hoverOffset: 13,
+          borderColor: '#fff',
+          hoverBorderColor: '#fff',
+          hoverBackgroundColor : [
+            
+            '#BB8DB5',
+            '#9884AE',
+            '#F5B391',
+            '#FCDA8C',
+            '#DD9AA9',
+            '#7F7F81',
+          ],
+          borderJoinStyle: 'bevel',
+         
+          
+        }]
+      };
+  
+      const config: any = {
+        type: 'polarArea',
+        data,
+        options: {
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false,
+            },
+            tooltip: {
+              yAlign: 'bottom',
+              displayColors: false,
+              backgroundColor: (tooltipItem: any) => {
+                if (tooltipItem) {
+                  console.log(tooltipItem)
+                  return tooltipItem.tooltip.labelColors[0].backgroundColor;
+                }
+              },
+            },
             title: {
-              display: false,
-              // text: 'Current Week',
-              // position: 'start',
-            },
-            labels: {
-              usePointStyle: true,
-              // padding: 300,
-              // color: 'red',
-              font: {
-                size: 7,
-                family: 'Manrope',
-              },
-            },
-          },
-          tooltip: {
-            yAlign: 'bottom',
-            displayColors: false,
-            backgroundColor: (tooltipItem: any) => {
-              if (tooltipItem.tooltipItems[0]) {
-                // console.log(tooltipItem.tooltipItems[0])
-                return tooltipItem.tooltipItems[0].dataset.backgroundColor;
-              }
-            },
-            callbacks: {
-              label: (tooltipItem: any): any => {
-                let label = tooltipItem.dataset.data[tooltipItem.dataIndex];
-                return 'Feature Count' + ' ' + label;
-              },
-            },
-          },
-          title: {
-            text: 'TRA-ROADS (Features)',
-            display: true,
-            align: 'start',
-            color: '#595959',
-            font: {
-              size: 12,
-              family: 'Manrope',
-            },
-          },
-        },
-        scales: {
-          x: {
-            // callback: function(label:any, index:any, labels:any) {
-            //   console.log(label)            
-            // },
-            ticks: {
-              // autoSkip: false,
-              color: 'black',
-              font: {
-                size: 7,
-                family: 'Manrope',
-              },
-            },
-
-            grid: {
-              display: false,
-            },
-          },
-          y: {
-            // max: 800,
-            // display: this.barCurrentWeek.some(value => value !== 0) || this.barPreviousWeek.some(value => value !== 0),
-            ticks: {
-              color: 'black',
-              // crossAlign: 'far',
-              // mirror: true,
-              // padding: -10,
-              // callback: function (value: any, index: any) {
-              //   if (value.length === 0) {
-              //     return 'No Data';
-              //   } else {
-              //     let str = 'QAR';
-              //     return str + ' ' + value;
-              //   }
-
-              // },
-              font: {
-                size: 7,
-                family: 'Manrope',
-              },
-            },
-            grid: {
-              drawTicks: false,
+              text: 'TRA ROADS (Features)',
               display: true,
+              align: 'start',
+              color: '#595959',
+              font: {
+                size: 13,
+                family: 'Manrope',
+              },
             },
           },
         },
-      },
-
-      plugins: []
-    };
-    this.chart = new Chart('MyChart4', config);
-  };
+        plugins: [ ],
+      };
+  
+  
+      if (this.chart != null) {
+        this.chart.destroy();
+      }
+  
+      this.chart = new Chart('MyChart4', config);
+    }
 
   ngOnDestroy(): void {
     this.chart.destroy();

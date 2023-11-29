@@ -1,6 +1,6 @@
 <div class="d-flex row gx-0 main-content">
   <div class="col-md-4 d-flex flex-column">
-    <div class="d-flex flex-row">
+    <mat-card class="shadow d-flex flex-row">
       <div
         class="col-4 d-flex flex-column left-top"
         *ngFor="let item of totalCounts"
@@ -12,7 +12,7 @@
           {{ item.count }}
         </div>
       </div>
-    </div>
+    </mat-card>
     <div class="d-flex row gx-0" *ngIf="excelData.length">
       <div style="border-right: 1px solid #fff;"
         class="col-6 d-flex flex-column dpt"
@@ -27,7 +27,7 @@
             {{ data.department_name }}
           </div>
           <div class="col-2">
-            <img style="border-radius: 10%; opacity: 0.5;" height="40" width="40" [src]="data.icon" alt="" />
+            <img style="border-radius: 10%; opacity: 0.8;" height="40" width="40" [src]="data.icon" alt="" />
           </div>
         </div>
         <div class="d-flex row gx-0 mt-1">
@@ -40,7 +40,7 @@
             </div>
             <span *ngFor="let section of data.sections">
               <div class="dot me-1"></div>
-              <span style="font-size: 10px; font-weight: 500;">{{ section }}</span>
+              <span style="font-size: 10px; font-weight: 500;">{{ section.name }}</span>
             </span>
           </div>
           <div class="col-4 d-flex flex-column mb-2">
@@ -55,8 +55,22 @@
         </div>
       </div>
     </div>
-    <div class="d-flex row gx-0 h-100">
-      <div
+    <div class="d-flex row  justify-content-start   gx-0 h-100">
+      <!-- <div class="col-5 d-flex flex-row">
+        <div class="col-3" style="background: red;">
+
+        </div>
+        <div class="col-9" style="background: greenyellow;">
+
+        </div>
+
+      </div> -->
+      <div class="col-12 my-2 ">
+        <app-graphs [totalProps]="comulativeCount"  ></app-graphs>
+
+      </div>
+      
+      <!-- <div
         class="col-6 d-flex flex-column total-counts"
         *ngFor="let key of getObjectKeys(comulativeCount)"
       >
@@ -66,36 +80,38 @@
         <div style="font-size: 22px; font-weight: 600;" class="text-end pe-3  " >
           <span>{{ comulativeCount[key] }}</span>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
   <div class="col-md-8 px-2 pt-1">
     <div class="row gx-0"  >
-        <div class="col-md-4 mt-2"  >
-            <app-row-graph  ></app-row-graph>
+        <div class="col-md-5 mt-2"  >
+            <app-row-graph [props]="rowProps"  ></app-row-graph>
         </div>
-        <div class="col-md-4 mt-2" >
-            <app-its-graph  ></app-its-graph >
+         
+        <div class="col-md-7 mt-2" >
+            <app-prk-graph [props]="parkProps"  ></app-prk-graph>
         </div>
-        <div class="col-md-4 mt-2" >
-            <app-prk-graph></app-prk-graph>
-        </div>
-        <div class="col-md-12 " style="margin-top: 5px;" >
-            <app-rfm-graph></app-rfm-graph>
-        </div>
-        <div class="col-md-4 " style="margin-top: 5px;" >
-          <app-roads-graph></app-roads-graph>
+        <div class="col-md-7 " style="margin-top: 5px;" >
+          <app-rfm-graph [props]="rfmProps" ></app-rfm-graph>
+      </div>
+        <div class="col-md-5" style="margin-top: 5px;"  >
+          <app-its-graph [props]="itsProps"  ></app-its-graph >
+      </div>
+       
+         <div class="col-md-4 " style="margin-top: 5px;" >
+          <app-roads-graph [props]="roadsProps" ></app-roads-graph>
       </div>
       <div class="col-md-4 " style="margin-top: 5px;" >
-        <app-traf-graph></app-traf-graph>
+        <app-traf-graph  [props]="trfProps" ></app-traf-graph>
     </div>
     <div class="col-md-4 " style="margin-top: 5px;" >
       <div style="font-family: Manrope;" class="ms-4">
-        <span>Legends</span>
+        <span  style="font-weight: 500;" >Legends</span>
       </div>
-      <div class="d-flex flex-row align-items-center     "   *ngFor="let lgnd of legend; let i = index" >
+      <div class="d-flex flex-row align-items-center mt-1    "   *ngFor="let lgnd of legend; let i = index" >
         <div [style.backgroundColor]="getlegendColor(i)" class="legend me-1"></div>
-          <div style=" font-size: 10px; font-family: Manrope;">
+          <div style=" font-size: 10px; font-family: Manrope; width: 200px; line-height: 160%; margin-top: 5px;" >
             <!-- <ng-container > -->
               {{lgnd}}
             <!-- </ng-container> -->

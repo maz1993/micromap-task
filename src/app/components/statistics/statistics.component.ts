@@ -23,22 +23,27 @@ export class StatisticsComponent {
   barLabel!: Array<any>;
   chart: any = null;
 
-  comulativeCount:any
+  comulativeCount: any;
 
   // Graphs
   rowProps: any;
   itsProps: any;
+  parkProps: any;
+  rfmProps: any;
+  roadsProps: any;
+  trfProps: any
+  cumulativeTotal:any
 
-  legend: Array<any>
+  legend: Array<any>;
 
-  rowBarLabel: Array<any>
-  rowData1: Array<any>
-  rowData2: Array<any>
-  rowData3: Array<any>
-  rowData4: Array<any>
-  rowData5: Array<any>
-  rowData6: Array<any>
-  props: any
+  rowBarLabel: Array<any>;
+  rowData1: Array<any>;
+  rowData2: Array<any>;
+  rowData3: Array<any>;
+  rowData4: Array<any>;
+  rowData5: Array<any>;
+  rowData6: Array<any>;
+  props: any;
   @HostListener('window:resize')
   returnInnerHeight(): any {
     this.appInnerHtml = Object(window).innerHeight;
@@ -57,11 +62,11 @@ export class StatisticsComponent {
       'assets/picture04.jpg',
       'assets/picture05.jpg',
     ];
-    this.totalCounts = [
-      { name: 'Departments', count: 6 },
-      { name: 'Sections', count: 21 },
-      { name: 'Feature Layers', count: 166 },
-    ];
+    // this.totalCounts = [
+    //   { name: 'Departments', count: 6 },
+    //   { name: 'Sections', count: 21 },
+    //   { name: 'Feature Layers', count: 166 },
+    // ];
 
     this.legend = [
       'Existing Features Updated from 4 July 2022 Untill 26 September 2023',
@@ -69,8 +74,8 @@ export class StatisticsComponent {
       'Total Feature Count Untill 3 July 2022',
       'Total Feature Count Untill 30 June 2023',
       'Total Feature Count Untill 30 September 2023',
-      'Total Feature Count Untill 31 March 2023'
-    ]
+      'Total Feature Count Untill 31 March 2023',
+    ];
     this.returnInnerHeight();
     // this.cureentWeek = 365;
     this.rowBarLabel = [];
@@ -83,73 +88,93 @@ export class StatisticsComponent {
 
     this.excelService.readExcelFile().then((processedData) => {
       this.excelData = processedData.departments;
-      this.comulativeCount = processedData.total
+      let totalCount = processedData.total;
+
+      console.log('newdatacheck', this.excelData)
+      
+      
+      // this.comulativeCount = totalCount;
 
       for (let i = 0; i < this.excelData.length; i++) {
         this.excelData[i]['icon'] = this.iconArray[i];
-        // console.log(this.excelData)
       }
 
-      // this.rowProps.rowBarLabel = this.excelData[0]['Feature Class Name'];
-      this.rowProps = this.excelData[0]
-      this.itsProps = this.excelData[1]
-      this.props = this.excelData[0]
+      const cloneArr: Array<any> = JSON.parse(JSON.stringify(this.excelData));
+      const totalSectionCount = cloneArr.reduce(
+        (acc, obj) => {
+          const sections = acc.sections + obj.sections.length;
+          const features = acc.features + obj['Feature Class Name'].length;
+          return {
+            sections,
+            features,
+          };
+        },
+        { sections: 0, features: 0 }
+      );
 
-      this
+      this.totalCounts = [
+        { name: 'Departments', count: cloneArr.length },
+        { name: 'Sections', count: totalSectionCount.sections },
+        { name: 'Feature Layers', count: totalSectionCount.features },
+      ];
+
+      this.comulativeCount = totalCount
+   
+
+      this.rowProps = this.excelData[0];
+      this.itsProps = this.excelData[1];
+      this.parkProps = this.excelData[2];
+      this.rfmProps = this.excelData[3]
+      this.roadsProps = this.excelData[4];
+      this.trfProps = this.excelData[5]
+      this.props = this.excelData[0];
+
+      // this
 
       console.log('Processed data in component:', this.excelData);
-      console.log('sdasdad', this.props)
+      console.log('sdasdad', this.props);
 
-      if(this.props)
-    {
-      const dataArray1 = this.props['Existing Features Updated from 4 July 2022 Untill 26 September 2023']
-      const dataArray2 = this.props['New Features created from 4 July 2022 Untill 26 September 2023']
-      const originalArray1 = this.props['Total Feature Count Untill 3 July 2022']
-      const dataArray3 = originalArray1.map((element:any) => (element === '-' ? 0 : element));
-      const dataArray4 = this.props['Total Feature Count Untill 30 June 2023']
-      const dataArray5 = this.props['Total Feature Count Untill 30 September 2023']
-      const originalArray2 = this.props['Total Feature Count Untill 31 March 2023'];
-      const dataArray6 = originalArray2.map((element:any) => (element === '-' ? 0 : element));
-      const label = this.props['Feature Class Name'];
+      //   if(this.props)
+      // {
+      //   const dataArray1 = this.props['Existing Features Updated from 4 July 2022 Untill 26 September 2023']
+      //   const dataArray2 = this.props['New Features created from 4 July 2022 Untill 26 September 2023']
+      //   const originalArray1 = this.props['Total Feature Count Untill 3 July 2022']
+      //   const dataArray3 = originalArray1.map((element:any) => (element === '-' ? 0 : element));
+      //   const dataArray4 = this.props['Total Feature Count Untill 30 June 2023']
+      //   const dataArray5 = this.props['Total Feature Count Untill 30 September 2023']
+      //   const originalArray2 = this.props['Total Feature Count Untill 31 March 2023'];
+      //   const dataArray6 = originalArray2.map((element:any) => (element === '-' ? 0 : element));
+      //   const label = this.props['Feature Class Name'];
 
-      for (let i = 0; i < dataArray1.length; i++) {
-        if (dataArray1[i] > 0 || dataArray2[i] > 0 || dataArray3[i] > 0 ||  dataArray4[i] > 0 || dataArray5[i] > 0 || dataArray6[i] > 0) {
-          this.rowData1.push(dataArray1[i]);
-          this.rowData2.push(dataArray2[i]);
-          this.rowData3.push(dataArray3[i]);
-          this.rowData4.push(dataArray4[i]);
-          this.rowData5.push(dataArray5[i]);
-          this.rowData6.push(dataArray6[i]);
-          this.rowBarLabel.push(label[i]);
-        }
-    }
-    }
-    console.log('1', this.rowData1)
-    console.log('2', this.rowData2)
-    console.log('4', this.rowData3)
-    console.log('5', this.rowData4)
-    console.log('6', this.rowData5)
-    console.log('7', this.rowData6)
-    console.log('8', this.rowBarLabel)
-    setTimeout(() => {
-      // this.createChart()
-    }, 1000);
+      //   for (let i = 0; i < dataArray1.length; i++) {
+      //     if (dataArray1[i] > 0 || dataArray2[i] > 0 || dataArray3[i] > 0 ||  dataArray4[i] > 0 || dataArray5[i] > 0 || dataArray6[i] > 0) {
+      //       this.rowData1.push(dataArray1[i]);
+      //       this.rowData2.push(dataArray2[i]);
+      //       this.rowData3.push(dataArray3[i]);
+      //       this.rowData4.push(dataArray4[i]);
+      //       this.rowData5.push(dataArray5[i]);
+      //       this.rowData6.push(dataArray6[i]);
+      //       this.rowBarLabel.push(label[i]);
+      //     }
+      // }
+      // }
+      // console.log('1', this.rowData1)
+      // console.log('2', this.rowData2)
+      // console.log('4', this.rowData3)
+      // console.log('5', this.rowData4)
+      // console.log('6', this.rowData5)
+      // console.log('7', this.rowData6)
+      // console.log('8', this.rowBarLabel)
+      // setTimeout(() => {
+      //   // this.createChart()
+      // }, 1000);
     });
   }
   ngOnInit(): void {
-    
-    // 
+    //
     // this.readExcelFile()
-    
     // setTimeout(() => {
-      
     // }, 100);
-    
-  }
-
-  chartInit() {
-    let data: any;
-    data = {};
   }
 
   createChart() {
@@ -157,67 +182,66 @@ export class StatisticsComponent {
     if (this.props) {
       console.log('Data has not arrived yet.');
     } else {
-    data = {
-      labels: this.rowBarLabel,
-      datasets: [
-        {
-          label: 'Updated Count Untill 3 July 2022',
-          data: this.rowData1,
-          backgroundColor: ['#5DADE2'],
-          barPercentage: 1,
-          hoverBackgroundColor: ['#5DADE2'],
-          categoryPercentage: 0.5,
-          barThickness: 6,
-        },
-        {
-          label: 'Created Count Untill 31 March 2023',
-          data: this.rowData2,
-          backgroundColor: ['#5BCBFF'],
-          barPercentage: 1,
-          hoverBackgroundColor: ['#5BCBFF'],
-          categoryPercentage: 0.5,
-          barThickness: 6,
-        },
-        {
-          label: 'Count Untill 30 June 2023',
-          data: this.rowData3,
-          backgroundColor: ['#24B8FD'],
-          barPercentage: 1,
-          hoverBackgroundColor: ['#24B8FD'],
-          categoryPercentage: 0.5,
-          barThickness: 6,
-        },
-        {
-          label: 'Count Untill 30 September 2023',
-          data: this.rowData4,
-          backgroundColor: ['#0092D6'],
-          barPercentage: 1,
-          hoverBackgroundColor: ['#0092D6'],
-          categoryPercentage: 0.5,
-          barThickness: 6,
-        },
-        {
-          label: 'Count Untill 30 September 2023',
-          data: this.rowData5,
-          backgroundColor: ['#0072A7'],
-          barPercentage: 1,
-          hoverBackgroundColor: ['#0072A7'],
-          categoryPercentage: 0.5,
-          barThickness: 6,
-        },
-        {
-          label: 'Count Untill 30 September 2023',
-          data: this.rowData6,
-          backgroundColor: ['#004F74'],
-          barPercentage: 1,
-          hoverBackgroundColor: ['#004F74'],
-          categoryPercentage: 0.5,
-          barThickness: 6,
-        },
-        
-      ],
-    };
-  }
+      data = {
+        labels: this.rowBarLabel,
+        datasets: [
+          {
+            label: 'Updated Count Untill 3 July 2022',
+            data: this.rowData1,
+            backgroundColor: ['#5DADE2'],
+            barPercentage: 1,
+            hoverBackgroundColor: ['#5DADE2'],
+            categoryPercentage: 0.5,
+            barThickness: 6,
+          },
+          {
+            label: 'Created Count Untill 31 March 2023',
+            data: this.rowData2,
+            backgroundColor: ['#5BCBFF'],
+            barPercentage: 1,
+            hoverBackgroundColor: ['#5BCBFF'],
+            categoryPercentage: 0.5,
+            barThickness: 6,
+          },
+          {
+            label: 'Count Untill 30 June 2023',
+            data: this.rowData3,
+            backgroundColor: ['#24B8FD'],
+            barPercentage: 1,
+            hoverBackgroundColor: ['#24B8FD'],
+            categoryPercentage: 0.5,
+            barThickness: 6,
+          },
+          {
+            label: 'Count Untill 30 September 2023',
+            data: this.rowData4,
+            backgroundColor: ['#0092D6'],
+            barPercentage: 1,
+            hoverBackgroundColor: ['#0092D6'],
+            categoryPercentage: 0.5,
+            barThickness: 6,
+          },
+          {
+            label: 'Count Untill 30 September 2023',
+            data: this.rowData5,
+            backgroundColor: ['#0072A7'],
+            barPercentage: 1,
+            hoverBackgroundColor: ['#0072A7'],
+            categoryPercentage: 0.5,
+            barThickness: 6,
+          },
+          {
+            label: 'Count Untill 30 September 2023',
+            data: this.rowData6,
+            backgroundColor: ['#004F74'],
+            barPercentage: 1,
+            hoverBackgroundColor: ['#004F74'],
+            categoryPercentage: 0.5,
+            barThickness: 6,
+          },
+        ],
+      };
+    }
 
     const config: any = {
       type: 'bar', //this denotes tha type of chart
@@ -325,29 +349,28 @@ export class StatisticsComponent {
 
   getColor(index: number): string {
     const colors = [
-      '#004F74',
-      
-      '#004F74',
-      '#0072A7',
-      
-      '#0072A7',
-      '#0092D6',
-      '#0092D6',
+      '#33CCCC',
+
+      '#7B33FA',
+      '#F9A037',
+
+      '#0071BC',
+      '#4B955F',
+      '#CE016A',
     ];
     return colors[index % colors.length];
   }
 
-  getlegendColor(index: number): string 
-  {
+  getlegendColor(index: number): string {
     const colors = [
-      '#5DADE2',
-      
-      '#5BCBFF',
-      '#24B8FD',
-      
-      '#0092D6',
-      '#0072A7',
-      '#004F74',
+      '#FCDA8C',
+
+      '#F5B391',
+      '#DD9AA9',
+
+      '#BB8DB5',
+      '#9884AE',
+      '#7F7F81',
     ];
     return colors[index % colors.length];
   }
@@ -358,14 +381,16 @@ export class StatisticsComponent {
     } else {
       return [];
     }
-    
   }
 }
 
-// '#004F74',
-//       '#0072A7',
-//       '#0092D6',
-      
-//       '#5DADE2',
-//       '#24B8FD',
-//       '#5BCBFF',
+// const colors = [
+//   '#CE016A',
+
+//   '#4B955F',
+//   '#33CCCC',
+
+//   '#F9A037',
+//   '#0071BC',
+//   '#7B33FA',
+// ];

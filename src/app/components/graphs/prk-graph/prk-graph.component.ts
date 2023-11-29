@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Chart } from 'chart.js';
 
 @Component({
@@ -6,9 +6,9 @@ import { Chart } from 'chart.js';
   templateUrl: './prk-graph.component.html',
   styleUrls: ['./prk-graph.component.scss']
 })
-export class PrkGraphComponent {
+export class PrkGraphComponent implements OnInit, OnChanges {
 
-  props!: any
+  @Input() props!: any
 
   graphData:any
 
@@ -33,29 +33,22 @@ export class PrkGraphComponent {
     this.rowData6 = [];
     
   }
+  
 
 
-  ngOnInit(): void {
-    // if(this.props)
-    // {
-      setTimeout(() => {
-        if(localStorage.getItem('excelData'))
+  ngOnInit(): void {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log('data from statistics comp', this.props)
+    if(this.props)
     {
-      
-      const abc = localStorage.getItem('excelData') as string
-      this.graphData = JSON.parse(abc)
-      console.log('for checking', this.graphData)
-      this.props = this.graphData[2]
-
       const dataArray1 = this.props['Existing Features Updated from 4 July 2022 Untill 26 September 2023']
       const dataArray2 = this.props['New Features created from 4 July 2022 Untill 26 September 2023']
-      const originalArray1 = this.props['Total Feature Count Untill 3 July 2022']
-      const dataArray3 = originalArray1.map((element:any) => (element === '-' ? 0 : element));
+      const dataArray3 = this.props['Total Feature Count Untill 3 July 2022']
       const dataArray4 = this.props['Total Feature Count Untill 30 June 2023']
       const dataArray5 = this.props['Total Feature Count Untill 30 September 2023']
-      const originalArray2 = this.props['Total Feature Count Untill 31 March 2023'];
-      const dataArray6 = originalArray2.map((element:any) => (element === '-' ? 0 : element));
-      const label = this.props['Feature Class Name'];
+      const dataArray6 = this.props['Total Feature Count Untill 31 March 2023'];
+      const label = this.props.sections;
 
       for (let i = 0; i < dataArray1.length; i++) {
         if (dataArray1[i] > 0 || dataArray2[i] > 0 || dataArray3[i] > 0 ||  dataArray4[i] > 0 || dataArray5[i] > 0 || dataArray6[i] > 0) {
@@ -65,134 +58,111 @@ export class PrkGraphComponent {
           this.rowData4.push(dataArray4[i]);
           this.rowData5.push(dataArray5[i]);
           this.rowData6.push(dataArray6[i]);
-          this.rowBarLabel.push(label[i]);
+          this.rowBarLabel.push(label[i].name);
         }
     }
-      console.log('data', this.props )
-      this.createChart()
-    }
-        
-      }, 1000);
 
-    
+     this.creatLineChart()
+    }
   }
 
 
 
-  createChart() {
-    let data: any;
-    data = {
+  creatLineChart() {
+    const data = {
       labels: this.rowBarLabel,
       datasets: [
         {
-          label: 'Updated Count Untill 3 July 2022',
+          label: 'Updated Untill 3 July 2022',
           data: this.rowData1,
-          backgroundColor: ['#5DADE2'],
-          barPercentage: 1,
-          hoverBackgroundColor: ['#5DADE2'],
-          categoryPercentage: 0.5,
-          barThickness: 6,
-          borderRadius: 10
+          pointBackgroundColor: ['#FCDA8C'],
+          borderColor: '#FCDA8C',
+          pointRadius: 4,
+          tension: 0.5,
+          hoverBorderColor: '#FCDA8C',
+          // fill: true,
         },
         {
-          label: 'Created Count Untill 31 March 2023',
+          label: 'Created Untill 31 March 2023',
           data: this.rowData2,
-          backgroundColor: ['#5BCBFF'],
-          barPercentage: 1,
-          hoverBackgroundColor: ['#5BCBFF'],
-          categoryPercentage: 0.5,
-          barThickness: 6,
-          borderRadius: 10
+          pointBackgroundColor: ['#F5B391'],
+          borderColor: '#F5B391', 
+          pointRadius: 4,
+          tension: 0.2,
+          hoverBorderColor: '#F5B391',
+          // fill: true,
         },
         {
-          label: 'Count Untill 30 June 2023',
+          label: 'Untill 3 July 2022',
           data: this.rowData3,
-          backgroundColor: ['#24B8FD'],
-          barPercentage: 1,
-          hoverBackgroundColor: ['#24B8FD'],
-          categoryPercentage: 0.5,
-          barThickness: 6,
-          borderRadius: 10
+          pointBackgroundColor: ['#DD9AA9'],
+          borderColor: '#DD9AA9',
+          pointRadius: 4,
+          tension: 0.5,
+          hoverBorderColor: '#DD9AA9',
+          // fill: true,
         },
         {
-          label: 'Count Untill 30 September 2023',
+          label: 'Untill 30 June 2023',
           data: this.rowData4,
-          backgroundColor: ['#0092D6'],
-          barPercentage: 1,
-          hoverBackgroundColor: ['#0092D6'],
-          categoryPercentage: 0.5,
-          barThickness: 6,
-          borderRadius: 10
+          pointBackgroundColor: ['#BB8DB5'],
+          borderColor: '#BB8DB5',
+          pointRadius: 4,
+          tension: 0.2,
+          hoverBorderColor: '#BB8DB5',
+          // fill: true,
         },
         {
-          label: 'Count Untill 30 September 2023',
+          label: 'Untill 30 September 2023',
           data: this.rowData5,
-          backgroundColor: ['#0072A7'],
-          barPercentage: 1,
-          hoverBackgroundColor: ['#0072A7'],
-          categoryPercentage: 0.5,
-          barThickness: 6,
-          borderRadius: 10
+          pointBackgroundColor: ['#9884AE'],
+          borderColor: '#9884AE',
+          pointRadius: 4,
+          tension: 0.5,
+          hoverBorderColor: '#9884AE',
+          // fill: true,
         },
         {
-          label: 'Count Untill 30 September 2023',
+          label: 'Untill 31 March 2023',
           data: this.rowData6,
-          backgroundColor: ['#004F74'],
-          barPercentage: 1,
-          hoverBackgroundColor: ['#004F74'],
-          categoryPercentage: 0.5,
-          barThickness: 6,
-          borderRadius: 10
+          pointBackgroundColor: ['#7F7F81'],
+          borderColor: '#7F7F81',
+          pointRadius: 4,
+          tension: 0.2,
+          hoverBorderColor: '#7F7F81',
+          // fill: true,
         },
-        
       ],
-  }
+    };
 
+    // config block
     const config: any = {
-      type: 'bar', 
+      type: 'line',
       data,
       options: {
-        // aspectRatio:2.5,
-        indexAxis: 'y',
         maintainAspectRatio: false,
-
         plugins: {
           legend: {
             display: false,
-            position: 'bottom',
-            title: {
-              display: false,
-              // text: 'Current Week',
-              // position: 'start',
-            },
-            labels: {
-              usePointStyle: true,
-              // padding: 300,
-              // color: 'red',
-              font: {
-                size: 7,
-                family: 'Manrope',
-              },
-            },
           },
           tooltip: {
             yAlign: 'bottom',
             displayColors: false,
             backgroundColor: (tooltipItem: any) => {
               if (tooltipItem.tooltipItems[0]) {
-                // console.log(tooltipItem.tooltipItems[0])
-                return tooltipItem.tooltipItems[0].dataset.backgroundColor;
+                return tooltipItem.tooltipItems[0].dataset.pointBackgroundColor;
               }
             },
             callbacks: {
               label: (tooltipItem: any): any => {
+                let labelKey = tooltipItem.dataset.label
                 let label = tooltipItem.dataset.data[tooltipItem.dataIndex];
-                return 'Feature Count' + ' ' + label;
+                return labelKey + ': ' + label;
               },
             },
           },
           title: {
-            text: 'TRA-PRK (Features)',
+            text: 'TRA PRK (Features)',
             display: true,
             align: 'start',
             color: '#595959',
@@ -204,39 +174,18 @@ export class PrkGraphComponent {
         },
         scales: {
           x: {
-            // callback: function(label:any, index:any, labels:any) {
-            //   console.log(label)            
-            // },
             ticks: {
-              // autoSkip: false,
-              color: 'black',
               font: {
                 size: 7,
                 family: 'Manrope',
               },
             },
-
             grid: {
               display: false,
             },
           },
           y: {
-            // max: 800,
-            // display: this.barCurrentWeek.some(value => value !== 0) || this.barPreviousWeek.some(value => value !== 0),
             ticks: {
-              color: 'black',
-              // crossAlign: 'far',
-              // mirror: true,
-              // padding: -10,
-              // callback: function (value: any, index: any) {
-              //   if (value.length === 0) {
-              //     return 'No Data';
-              //   } else {
-              //     let str = 'QAR';
-              //     return str + ' ' + value;
-              //   }
-
-              // },
               font: {
                 size: 7,
                 family: 'Manrope',
@@ -249,11 +198,15 @@ export class PrkGraphComponent {
           },
         },
       },
-
-      plugins: []
+      plugins: [],
     };
+
+    if (this.chart != null) {
+      this.chart.destroy();
+    }
+
     this.chart = new Chart('MyChart3', config);
-  };
+  }
 
   ngOnDestroy(): void {
     this.chart.destroy();
