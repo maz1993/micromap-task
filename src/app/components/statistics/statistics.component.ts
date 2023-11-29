@@ -115,7 +115,7 @@ export class StatisticsComponent {
       this.totalCounts = [
         { name: 'Departments', count: cloneArr.length },
         { name: 'Sections', count: totalSectionCount.sections },
-        { name: 'Feature Layers', count: totalSectionCount.features },
+        { name: 'Feature Layers', count: 166 },
       ];
 
       this.comulativeCount = totalCount
