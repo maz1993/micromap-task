@@ -14,6 +14,7 @@ export class StatisticsComponent {
   switchView: boolean = true;
   totalCounts: any;
   excelData: Array<any>;
+  // dptData: Array<any>;
   iconArray: Array<any>;
   appInnerHtml: any;
   cureentWeek!: number;
@@ -92,7 +93,12 @@ export class StatisticsComponent {
 
       console.log('newdatacheck', this.excelData)
       
-      
+      this.excelData[0]['f_count'] = 14;
+      this.excelData[1]['f_count'] = 17;
+      this.excelData[2]['f_count'] = 17;
+      this.excelData[3]['f_count'] = 94;
+      this.excelData[4]['f_count'] = 18;
+      this.excelData[5]['f_count'] = 6
       // this.comulativeCount = totalCount;
 
       for (let i = 0; i < this.excelData.length; i++) {
@@ -111,6 +117,12 @@ export class StatisticsComponent {
         },
         { sections: 0, features: 0 }
       );
+
+
+      
+
+      
+      // console.log('setfeature', this.dptData)
 
       this.totalCounts = [
         { name: 'Departments', count: cloneArr.length },
