@@ -50,7 +50,7 @@ export class RowGraphComponent implements OnInit, OnChanges{
       const label = this.props.sections;
 
       for (let i = 0; i < dataArray1.length; i++) {
-        if (dataArray1[i] > 0 || dataArray2[i] > 0 || dataArray3[i] > 0 ||  dataArray4[i] > 0 || dataArray5[i] > 0 || dataArray6[i] > 0) {
+        // if (dataArray1[i] > 0 || dataArray2[i] > 0 || dataArray3[i] > 0 ||  dataArray4[i] > 0 || dataArray5[i] > 0 || dataArray6[i] > 0) {
           this.rowData1.push(dataArray1[i]);
           this.rowData2.push(dataArray2[i]);
           this.rowData3.push(dataArray3[i]);
@@ -58,7 +58,7 @@ export class RowGraphComponent implements OnInit, OnChanges{
           this.rowData5.push(dataArray5[i]);
           this.rowData6.push(dataArray6[i]);
           this.rowBarLabel.push(label[i].name);
-        }
+        // }
     }
 
      this.createChart()
@@ -108,26 +108,28 @@ export class RowGraphComponent implements OnInit, OnChanges{
           categoryPercentage: 0.5,
           barThickness: 8,
         },
-        {
-          label: 'Untill 30 September 2023',
-          data: this.rowData5,
-          backgroundColor: ['#9884AE'],
-          hoverBackgroundColor: ['#9884AE'],
-          categoryPercentage: 0.5,
-          barThickness: 6,
-        },
-        {
-          label: 'Untill 31 March 2023',
-          data: this.rowData6,
-          backgroundColor: ['#7F7F81'],
-          hoverBackgroundColor: ['#7F7F81'],
-          categoryPercentage: 0.5,
-          barThickness: 6,
-        },
+        // {
+        //   label: 'Untill 30 September 2023',
+        //   data: this.rowData5,
+        //   backgroundColor: ['#9884AE'],
+        //   hoverBackgroundColor: ['#9884AE'],
+        //   categoryPercentage: 0.5,
+        //   barThickness: 6,
+        // },
+        // {
+        //   label: 'Untill 31 March 2023',
+        //   data: this.rowData6,
+        //   backgroundColor: ['#7F7F81'],
+        //   hoverBackgroundColor: ['#7F7F81'],
+        //   categoryPercentage: 0.5,
+        //   barThickness: 6,
+        // },
         
       ],
     // };
   }
+
+  console.log('checkkkkkrrrrr', data)
 
     const config: any = {
       type: 'bar', 

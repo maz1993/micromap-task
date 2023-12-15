@@ -1,104 +1,182 @@
-import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { Chart } from 'chart.js';
 
 @Component({
   selector: 'app-graphs',
   templateUrl: './graphs.component.html',
-  styleUrls: ['./graphs.component.scss']
+  styleUrls: ['./graphs.component.scss'],
 })
 export class GraphsComponent implements OnInit, OnChanges {
 
-  @Input() totalProps!: any
-  graphLabel: Array<any>
-  graphData: Array<any>
+  @Input() graphLabel: Array<any>;
+  @Input() graphData: Array<any>;
   chart: any = null;
 
-  constructor(){
-    this.graphLabel = []
-    this.graphData = [] 
+  constructor() {
+    this.graphLabel = [];
+    this.graphData = [];
   }
 
   ngOnInit(): void {}
 
-
-  ngOnChanges(changes: SimpleChanges): void
-  {
-    if(this.totalProps)
-    {
-      for (const [key, value] of Object.entries(this.totalProps)) {
-        
-        this.graphLabel.push(key);
-        this.graphData.push(value);
-      }
-      console.log('data', this.graphLabel)
-      this.chartInIt()
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.graphLabel) {
+      // console.log('data123', this.graphLabel);
+      // console.log('data456', this.graphData);
+      this.chartInIt();
     }
   }
 
-
   chartInIt() {
-    const data = {
+    console.log('albel', this.graphLabel)
+    let data: any;
+    data = {
       labels: this.graphLabel,
-      datasets: [{
-        label: 'My First Dataset',
-        data: this.graphData,
-        backgroundColor: [
-          '#DD9AA9',
-          '#7F7F81',
-          '#BB8DB5',
-          '#9884AE',
-          '#F5B391',
-          '#FCDA8C',
-        ],
-        hoverOffset: 13,
-        borderColor: '#fff',
-        hoverBorderColor: '#fff',
-        hoverBackgroundColor : [
-          '#DD9AA9',
-          '#7F7F81',
-          '#BB8DB5',
-          '#9884AE',
-          '#F5B391',
-          '#FCDA8C',
-        ],
-        borderJoinStyle: 'bevel',
-        
-      }]
+      datasets: [
+        {
+          label: 'Updated Untill 3 July 2022',
+          data: this.graphData,
+          backgroundColor: [
+            '#16639B',
+            '#7A8762',
+            '#FF9422',
+            '#8D99FD',
+            '#D7EAA8',
+            '#FD635C',
+          ],
+          hoverBackgroundColor: [
+            '#16639B',
+            '#7A8762',
+            '#FF9422',
+            '#8D99FD',
+            '#D7EAA8',
+            '#FD635C',
+          ],
+          barThickness: 30,
+          borderWidth: 1,
+          borderRadius: 3,
+          borderColor: [
+            '#16639B',
+            '#7A8762',
+            '#FF9422',
+            '#8D99FD',
+            '#D7EAA8',
+            '#FD635C',
+          ],
+          hoverBorderColor: [
+            '#16639B',
+            '#7A8762',
+            '#FF9422',
+            '#8D99FD',
+            '#D7EAA8',
+            '#FD635C',
+          ],
+        },
+      ],
+      // };
     };
 
     const config: any = {
-      type: 'polarArea',
+      type: 'bar',
       data,
       options: {
+        indexAxis: 'y',
         maintainAspectRatio: false,
+
         plugins: {
           legend: {
             display: false,
+            position: 'bottom',
+            title: {
+              display: false,
+            },
+            labels: {
+              usePointStyle: true,
+              font: {
+                size: 7,
+                family: 'Manrope',
+              },
+            },
           },
           tooltip: {
             yAlign: 'bottom',
             displayColors: false,
             backgroundColor: (tooltipItem: any) => {
-              if (tooltipItem) {
-                return tooltipItem.tooltip.labelColors[0].backgroundColor;
+              if (tooltipItem.tooltipItems[0]) {
+                const dataIndex = tooltipItem.tooltipItems[0].dataIndex;
+                const datasetIndex = tooltipItem.tooltipItems[0].datasetIndex;
+                const backgroundColors =
+                  tooltipItem.chart.data.datasets[datasetIndex].backgroundColor;
+
+                if (backgroundColors && backgroundColors.length > dataIndex) {
+                  return backgroundColors[dataIndex];
+                }
               }
+              return 'rgba(0, 0, 0, 0.7)';
+            },
+
+            callbacks: {
+              label: (tooltipItem: any): any => {
+                let label = tooltipItem.dataset.data[tooltipItem.dataIndex];
+                return 'Features' + ': ' + label;
+              },
             },
           },
           title: {
-            text: 'Total Features Count',
-            display: true,
+            text: 'TRA TRAF (Features)',
+            display: false,
             align: 'start',
             color: '#595959',
             font: {
-              size: 13,
+              size: 12,
               family: 'Manrope',
             },
           },
         },
-      },
-      plugins: [ ],
-    };
+        scales: {
+          x: {
+            position: 'top',
+            ticks: {
+              callback: (value: any, index: any, values: any) => {
+                return value >= 1000 ? value / 1000 + 'k' : value;
+              },
+              color: '#0092d6',
+              font: {
+                size: 8,
+                weight: 600,
+                family: 'Manrope',
+              },
+            },
 
+            grid: {
+              display: false,
+            },
+          },
+          y: {
+            ticks: {
+              display: false,
+              color: 'black',
+              font: {
+                size: 7,
+                family: 'Manrope',
+              },
+            },
+            grid: {
+              drawTicks: false,
+              display: true,
+            },
+          },
+        },
+      },
+
+      plugins: [],
+    };
 
     if (this.chart != null) {
       this.chart.destroy();
@@ -109,6 +187,5 @@ export class GraphsComponent implements OnInit, OnChanges {
 
   ngOnDestroy(): void {
     this.chart.destroy();
-
   }
 }

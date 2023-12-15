@@ -12,8 +12,16 @@ import { ExcelServiceService } from './services/excel-service.service';
 export class AppComponent implements OnInit {
   title = 'data_visualization_dashboard';
   switchView: boolean = true;
+  appInnerHtml: any;
 
-  constructor() {}
+  @HostListener('window:resize')
+  returnInnerHeight(): any {
+    this.appInnerHtml = Object(window).innerHeight;
+  }
+
+  constructor() {
+    this.returnInnerHeight();
+  }
 
   ngOnInit(): void {}
 

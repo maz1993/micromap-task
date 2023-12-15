@@ -143,3 +143,89 @@ p{
 .c-total{
     font-size: 13px;
 }
+
+.title{
+    font-size: 16px;
+}
+
+.form-select:focus {
+    outline: none;
+    box-shadow: none; /* Optional: Remove box shadow on focus */
+}
+
+.form-select{
+    font-size: 13px;
+    font-family: "Manrope";
+    cursor: pointer;
+    
+}
+
+.form-select:hover  option{
+    cursor: pointer;
+}
+
+.main-heading{
+    font-size: 16px;
+    font-weight: 700;
+    color: #0092d6;
+}
+
+.total-count{
+    min-height: 8%;
+    color: #0072A7;
+    
+    .total-name{
+        height: 40%;
+        padding-top: 5px;
+        font-size: 15px;
+        font-weight: 600;
+        
+    }
+    .total-value{
+        height: 60%;
+        padding: 8px 0;
+        font-size: 30px;
+        font-weight: 600;
+    }
+}
+
+.dpts-conatiner{
+    min-height: 48%;
+    color: #fff;
+    .dpt-box{
+        height: 50%;
+        background-size: cover;
+  background-position: center;
+//   opacity: 0.5;
+  position: relative;
+    }
+    .dpt-box1{
+        width: 100%;
+        height: 100%;
+        opacity: 0.8    ;
+        position: relative;
+  z-index: 1;
+//   border: 1px solid white;   
+    }
+    .dpt-header{
+        height: 20%;
+        padding: 8px 0;
+        font-size: 16px; 
+        font-weight: 800;
+        
+        
+    }
+    .dpt-content{
+        height: 80%;
+        .dpt-section{
+            font-size: 10px;
+            font-weight: 500;
+        }
+    }
+}
+
+.chat-body {
+    min-height: 47%;
+}
+
+

@@ -1,11 +1,11 @@
-<div class="d-flex row gx-0 main-content">
-  <div class="col-md-4 d-flex flex-column">
+<!-- <div class="d-flex row gx-0 main-content">
+  <div class="col-md-5 d-flex flex-column">
     <mat-card class="shadow d-flex flex-row">
       <div
         class="col-4 d-flex flex-column left-top"
         *ngFor="let item of totalCounts"
       >
-        <div  class="col-12 ps-3 py-2 heading">
+        <div class="col-12 ps-3 py-2 heading">
           {{ item.name }}
         </div>
         <div class="col-12 pe-3 py-2 text-end count">
@@ -14,7 +14,8 @@
       </div>
     </mat-card>
     <div class="d-flex row gx-0" *ngIf="excelData.length">
-      <div style="border-right: 1px solid #fff;"
+      <div
+        style="border-right: 1px solid #fff"
         class="col-6 d-flex flex-column dpt"
         *ngFor="let data of excelData; let i = index"
         [style.backgroundColor]="getColor(i)"
@@ -27,7 +28,13 @@
             {{ data.department_name }}
           </div>
           <div class="col-2">
-            <img style="border-radius: 10%; opacity: 0.8;" height="40" width="40" [src]="data.icon" alt="" />
+            <img
+              style="border-radius: 10%; opacity: 0.8"
+              height="40"
+              width="40"
+              [src]="data.icon"
+              alt=""
+            />
           </div>
         </div>
         <div class="d-flex row gx-0 mt-1">
@@ -40,87 +47,228 @@
             </div>
             <span *ngFor="let section of data.sections">
               <div class="dot me-1"></div>
-              <span style="font-size: 10px; font-weight: 500;">{{ section.name }}</span>
+              <span style="font-size: 10px; font-weight: 500">{{
+                section.name
+              }}</span>
             </span>
           </div>
           <div class="col-4 d-flex flex-column mb-2">
             <div style="font-weight: 500; font-size: 16px">Features</div>
             <div
-              style="font-size: 28px; font-weight: 700;"
+              style="font-size: 28px; font-weight: 700"
               class="h-100 mt-2 d-flex justify-content-center"
             >
-              {{data.f_count}}
+              {{ data.f_count }}
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="d-flex row  justify-content-start   gx-0 h-100">
-      <!-- <div class="col-5 d-flex flex-row">
-        <div class="col-3" style="background: red;">
+    <div
+      class="d-flex row justify-content-start gx-0 mb-3 "
 
+    >
+      <div class="col-md-6 d-flex flex-column mt-2">
+        <div
+          class="ms-3"
+          style="font-size: 15px; font-weight: 600; color: #0092d6"
+        >
+          Total Feature Count
         </div>
-        <div class="col-9" style="background: greenyellow;">
-
+        <div
+          class="d-flex flex-wrap mt-3"
+          *ngFor="let label of totalLabel; let i = index"
+        >
+          <div
+            class="col-5 align-self-center mx-2" style="border-radius: 5px;" [style.border]="'solid'" [style.borderWidth.px]="4 "
+            [style.borderColor]="getlegendColor(i)"
+          >
+            <div
+              class="text-center my-1"
+              style="font-size: 18px; font-weight: 700; color: #0092d6"
+            >
+              {{ totalValue[i] }}
+            </div>
+          </div>
+          <div
+            class="col-6"
+            style="font-size: 12px; font-weight: 600; color: #0092d6"
+          >
+            {{ label }}
+          </div>
         </div>
-
-      </div> -->
-      <div class="col-12 my-2 ">
-        <app-graphs [totalProps]="comulativeCount"  ></app-graphs>
-
+      </div>
+      <div class="col-md-6 d-flex mt-3 ">
+          <app-graphs class="col-12"   [graphData]="totalValue"  [graphLabel]="totalLabel"></app-graphs>
       </div>
       
-      <!-- <div
-        class="col-6 d-flex flex-column total-counts"
-        *ngFor="let key of getObjectKeys(comulativeCount)"
-      >
-        <div class="d-flex me-1" style="padding: 8px 0;">
-          <span class="c-total ps-3"> {{key}} </span>
-        </div>
-        <div style="font-size: 22px; font-weight: 600;" class="text-end pe-3  " >
-          <span>{{ comulativeCount[key] }}</span>
-        </div>
-      </div> -->
     </div>
   </div>
-  <div class="col-md-8 px-2 pt-1">
-    <div class="row gx-0"  >
-        <div class="col-md-5 mt-2"  >
-            <app-row-graph [props]="rowProps"  ></app-row-graph>
-        </div>
-         
-        <div class="col-md-7 mt-2" >
-            <app-prk-graph [props]="parkProps"  ></app-prk-graph>
-        </div>
-        <div class="col-md-7 " style="margin-top: 5px;" >
-          <app-rfm-graph [props]="rfmProps" ></app-rfm-graph>
-      </div>
-        <div class="col-md-5" style="margin-top: 5px;"  >
-          <app-its-graph [props]="itsProps"  ></app-its-graph >
-      </div>
-       
-         <div class="col-md-4 " style="margin-top: 5px;" >
-          <app-roads-graph [props]="roadsProps" ></app-roads-graph>
-      </div>
-      <div class="col-md-4 " style="margin-top: 5px;" >
-        <app-traf-graph  [props]="trfProps" ></app-traf-graph>
-    </div>
-    <div class="col-md-4 " style="margin-top: 5px;" >
-      <div style="font-family: Manrope;" class="ms-4">
-        <span  style="font-weight: 500;" >Legends</span>
-      </div>
-      <div class="d-flex flex-row align-items-center mt-1    "   *ngFor="let lgnd of legend; let i = index" >
-        <div [style.backgroundColor]="getlegendColor(i)" class="legend me-1"></div>
-          <div style=" font-size: 10px; font-family: Manrope; width: 200px; line-height: 160%; margin-top: 5px;" >
-            <!-- <ng-container > -->
-              {{lgnd}}
-            <!-- </ng-container> -->
-            <!-- {{data[0][]}} -->
+  <div class="col-md-7 d-flex flex-column px-2 pt-1">
+    <div class="d-flex flex-column h-50">
+      <div class="d-flex flex-column">
+        <div class="mt-1 ms-2 main-heading">Visualize Data by Department or Section</div>
+        <div class="d-flex flex row  justify-content-between align-items-center ">
+          <div class="col-5">
+            <mat-radio-group aria-label="Select an option"   [(ngModel)]="selectedOption" (change)="onSelectionChange()" >
+              <mat-radio-button value="department" class="mantee">Department</mat-radio-button>
+              <mat-radio-button value="sections" class="mantee ps-lg-5" >Sections</mat-radio-button>
+            </mat-radio-group>
           </div>
+          <div class="col-4">
+            <ng-container *ngIf="selectedOption === 'sections'">
+              <select class="form-select" aria-label="Default select example" [(ngModel)]="selectedDepartment" (change)="onDepartmentChange()">
+                <option *ngFor="let data of excelData">{{data.department_name}}</option>
+
+              </select>
+            </ng-container>
+            
+          </div>
+          
+        </div>
+
       </div>
-  </div>
-        
+      <div class="d-flex h-100 mt-2"   >
+        <canvas  class="mx-2" id="MyChart"> </canvas>
+      </div>
 
     </div>
+    <div>
+      
+    </div>
   </div>
+</div> -->
+
+<div class="col-md-5 d-flex flex-column" >
+  <!-- first -->
+  <div class="d-flex flex-row total-count" >
+    <div style="border: 1px solid #0072A7;"
+      class="col-4 d-flex flex-column ps-3"
+      *ngFor="let count of totalCounts"
+    >
+      <div class="total-name d-flex align-items-center">{{ count.name }}</div>
+      <div
+        class="total-value d-flex align-items-center justify-content-end pe-3"
+      >
+        {{ count.count }}
+      </div>
+    </div>
+  </div>
+  <!-- second -->
+  <div class="d-flex flex-wrap dpts-conatiner">
+    <div
+      class="col-4 dpt-box d-flex flex-column"
+      [style.background-image]="'url(' + data.icon + ')'"
+      *ngFor="let data of excelData; let i = index"
+    >
+      <div
+        class="col-4 dpt-box1 d-flex flex-column"
+        [style.backgroundColor]="getColor(i)"
+      >
+        <div
+          class="d-flex flex-row dpt-header align-items-center"
+          style="border-bottom: 1px solid white"
+        >
+          <div class="col-7 ps-3">
+            {{ data.department_name }}
+          </div>
+          <div
+            class="col-5 text-end"
+            style="font-size: 14px; padding: 5px 5px 5px 0"
+          >
+            Features
+          </div>
+        </div>
+        <div class="d-flex flex-column dpt-content">
+          <div class="d-flex flex-row py-2">
+            <div class="col-5 ps-3" style="font-size: 14px; font-weight: 600">
+              Sections
+            </div>
+            <div
+              class="col-7 text-end pe-3"
+              style="font-size: 28px; font-weight: 800"
+            >
+              {{ data.f_count }}
+            </div>
+          </div>
+
+          <div class="d-flex col-10 flex-wrap dpt-section ps-1">
+            <ng-container *ngFor="let section of data.sections">
+              <div>
+                <div class="dot me-1 pb-1"></div>
+                {{ section.name }}
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- third -->
+  <div style="border-right: 1px solid #0072A7;"
+      class="d-flex row flex-grow-1 justify-content-start gx-0 mb-3 "
+
+    >
+      <div class="col-md-6 d-flex flex-column mt-2 ">
+        <div
+          class="ms-3"
+          style="font-size: 15px; font-weight: 600; color: #0092d6"
+        >
+          Total Feature Count
+        </div>
+        <div
+          class="d-flex flex-wrap mt-3 h-100"
+          *ngFor="let label of totalLabel; let i = index"
+        >
+          <div
+            class="col-5 align-self-center mx-2" style="border-radius: 5px;" [style.border]="'solid'" [style.borderWidth.px]="4 "
+            [style.borderColor]="getlegendColor(i)"
+          >
+            <div
+              class="text-center my-1"
+              style="font-size: 18px; font-weight: 700; color: #0092d6"
+            >
+              {{ totalValue[i] }}
+            </div>
+          </div>
+          <div
+            class="col-6 d-flex align-items-center"
+            style="font-size: 12px; font-weight: 600; color: #0092d6;"
+          >
+            {{ label }}
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 d-flex mt-3 ">
+          <app-graphs class="col-12"   [graphData]="totalValue"  [graphLabel]="totalLabel"></app-graphs>
+      </div>
+      
+    </div>
+
+
+
+</div>
+<div class="col-md-7 d-flex flex-column" >
+  <div class="mt-2 ps-3 main-heading">Visualize Data by Department or Section</div>
+  <div class="d-flex flex-row justify-content-between ps-2">
+    <div class="col-5">
+      <mat-radio-group aria-label="Select an option"   [(ngModel)]="selectedOption" (change)="onSelectionChange()" >
+        <mat-radio-button value="department" class="mantee">Department</mat-radio-button>
+        <mat-radio-button value="sections" class="mantee ps-lg-5" >Sections</mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <div class="col-4 pe-2">
+      <ng-container *ngIf="selectedOption === 'sections'">
+        <select class="form-select" aria-label="Default select example" [(ngModel)]="selectedDepartment" (change)="onDepartmentChange()">
+          <option *ngFor="let data of excelData">{{data.department_name}}</option>
+
+        </select>
+      </ng-container>
+      
+    </div>
+  </div>
+  <div class="d-flex chat-body ps-2">
+    <canvas  class="mx-2" id="MyChart"> </canvas>
+  </div>
+
 </div>

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -17,6 +17,9 @@ import { RfmGraphComponent } from './components/graphs/rfm-graph/rfm-graph.compo
 import { PrkGraphComponent } from './components/graphs/prk-graph/prk-graph.component';
 import { RoadsGraphComponent } from './components/graphs/roads-graph/roads-graph.component';
 import { TrafGraphComponent } from './components/graphs/traf-graph/traf-graph.component';
+import {MatRadioModule} from '@angular/material/radio';
+import {MatSelectModule} from '@angular/material/select';
+import { MatIconModule } from '@angular/material/icon';
 
 
 @NgModule({
@@ -41,6 +44,10 @@ import { TrafGraphComponent } from './components/graphs/traf-graph/traf-graph.co
     MatCardModule,
     NgChartsModule,
     HttpClientModule,
+    MatRadioModule,
+    FormsModule,
+    MatSelectModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]

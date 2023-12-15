@@ -2,7 +2,6 @@
 .header{
     background: #0092D6;
     height: 50px;
-    min-width: 50px;
     .heading{
         font-size: 20px;
         margin-left: 15px; 
@@ -10,3 +9,12 @@
         color: #fff;
     }
 }
+
+.main-container{
+    height: calc(100% - 50px);
+    overflow-y: auto;
+}
+
+
+
+

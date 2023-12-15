@@ -11,6 +11,18 @@ import { RowGraph } from 'src/app/models';
 })
 export class StatisticsComponent {
   title = 'data_visualization_dashboard';
+  // New Vars
+  totalLabel: Array<any>;
+  totalValue: Array<any>;
+  selectedOption: string = 'department';
+  genderIsOpen: boolean = false;
+  totalDptCount: any;
+  dptLabelArr: Array<any>;
+  dptValueArr: Array<any>;
+  selectedDepartment: string = 'TRA-ROW'
+  dptName: any;
+  charTitle: any = 'Departmental Feature Counts'
+
   switchView: boolean = true;
   totalCounts: any;
   excelData: Array<any>;
@@ -32,8 +44,8 @@ export class StatisticsComponent {
   parkProps: any;
   rfmProps: any;
   roadsProps: any;
-  trfProps: any
-  cumulativeTotal:any
+  trfProps: any;
+  cumulativeTotal: any;
 
   legend: Array<any>;
 
@@ -55,6 +67,11 @@ export class StatisticsComponent {
     public excelService: ExcelServiceService
   ) {
     this.excelData = [];
+    this.totalLabel = [];
+    this.totalValue = [];
+    this.dptLabelArr = [];
+    this.dptValueArr = [];
+
     this.iconArray = [
       'assets/picture0.jpg',
       'assets/picture01.jpg',
@@ -90,96 +107,45 @@ export class StatisticsComponent {
     this.excelService.readExcelFile().then((processedData) => {
       this.excelData = processedData.departments;
       let totalCount = processedData.total;
+      console.log('totlcoumntssss', totalCount);
 
-      console.log('newdatacheck', this.excelData)
-      
-      this.excelData[0]['f_count'] = 14;
-      this.excelData[1]['f_count'] = 17;
-      this.excelData[2]['f_count'] = 17;
-      this.excelData[3]['f_count'] = 94;
-      this.excelData[4]['f_count'] = 18;
-      this.excelData[5]['f_count'] = 6
-      // this.comulativeCount = totalCount;
+      console.log('newdatacheck', this.excelData);
+      this.excelData.forEach((el, i) => {
+        let abc = el.department_last_index - el.department_start_index;
+        el['f_count'] = abc + 1;
+        // if(i === 5)
+        // {
+        //   el['f_count'] = abc - 8
+        // }
+      });
 
       for (let i = 0; i < this.excelData.length; i++) {
         this.excelData[i]['icon'] = this.iconArray[i];
       }
 
-      const cloneArr: Array<any> = JSON.parse(JSON.stringify(this.excelData));
-      const totalSectionCount = cloneArr.reduce(
-        (acc, obj) => {
-          const sections = acc.sections + obj.sections.length;
-          const features = acc.features + obj['Feature Class Name'].length;
-          return {
-            sections,
-            features,
-          };
-        },
-        { sections: 0, features: 0 }
-      );
+      this.getdpt(this.excelData);
 
-
-      
-
-      
-      // console.log('setfeature', this.dptData)
-
-      this.totalCounts = [
-        { name: 'Departments', count: cloneArr.length },
-        { name: 'Sections', count: totalSectionCount.sections },
-        { name: 'Feature Layers', count: 166 },
-      ];
-
-      this.comulativeCount = totalCount
-   
+      this.comulativeCount = totalCount;
 
       this.rowProps = this.excelData[0];
       this.itsProps = this.excelData[1];
       this.parkProps = this.excelData[2];
-      this.rfmProps = this.excelData[3]
+      this.rfmProps = this.excelData[3];
       this.roadsProps = this.excelData[4];
-      this.trfProps = this.excelData[5]
+      this.trfProps = this.excelData[5];
       this.props = this.excelData[0];
-
-      // this
 
       console.log('Processed data in component:', this.excelData);
       console.log('sdasdad', this.props);
+      this.getTotalCount(totalCount);
+      if (this.selectedOption == 'department') {
+        
+        this.VisualizebyDpt(this.excelData);
+        this.createChart();
+      }
 
-      //   if(this.props)
-      // {
-      //   const dataArray1 = this.props['Existing Features Updated from 4 July 2022 Untill 26 September 2023']
-      //   const dataArray2 = this.props['New Features created from 4 July 2022 Untill 26 September 2023']
-      //   const originalArray1 = this.props['Total Feature Count Untill 3 July 2022']
-      //   const dataArray3 = originalArray1.map((element:any) => (element === '-' ? 0 : element));
-      //   const dataArray4 = this.props['Total Feature Count Untill 30 June 2023']
-      //   const dataArray5 = this.props['Total Feature Count Untill 30 September 2023']
-      //   const originalArray2 = this.props['Total Feature Count Untill 31 March 2023'];
-      //   const dataArray6 = originalArray2.map((element:any) => (element === '-' ? 0 : element));
-      //   const label = this.props['Feature Class Name'];
 
-      //   for (let i = 0; i < dataArray1.length; i++) {
-      //     if (dataArray1[i] > 0 || dataArray2[i] > 0 || dataArray3[i] > 0 ||  dataArray4[i] > 0 || dataArray5[i] > 0 || dataArray6[i] > 0) {
-      //       this.rowData1.push(dataArray1[i]);
-      //       this.rowData2.push(dataArray2[i]);
-      //       this.rowData3.push(dataArray3[i]);
-      //       this.rowData4.push(dataArray4[i]);
-      //       this.rowData5.push(dataArray5[i]);
-      //       this.rowData6.push(dataArray6[i]);
-      //       this.rowBarLabel.push(label[i]);
-      //     }
-      // }
-      // }
-      // console.log('1', this.rowData1)
-      // console.log('2', this.rowData2)
-      // console.log('4', this.rowData3)
-      // console.log('5', this.rowData4)
-      // console.log('6', this.rowData5)
-      // console.log('7', this.rowData6)
-      // console.log('8', this.rowBarLabel)
-      // setTimeout(() => {
-      //   // this.createChart()
-      // }, 1000);
+      
     });
   }
   ngOnInit(): void {
@@ -189,93 +155,124 @@ export class StatisticsComponent {
     // }, 100);
   }
 
-  createChart() {
-    let data: any;
-    if (this.props) {
-      console.log('Data has not arrived yet.');
-    } else {
-      data = {
-        labels: this.rowBarLabel,
-        datasets: [
-          {
-            label: 'Updated Count Untill 3 July 2022',
-            data: this.rowData1,
-            backgroundColor: ['#5DADE2'],
-            barPercentage: 1,
-            hoverBackgroundColor: ['#5DADE2'],
-            categoryPercentage: 0.5,
-            barThickness: 6,
-          },
-          {
-            label: 'Created Count Untill 31 March 2023',
-            data: this.rowData2,
-            backgroundColor: ['#5BCBFF'],
-            barPercentage: 1,
-            hoverBackgroundColor: ['#5BCBFF'],
-            categoryPercentage: 0.5,
-            barThickness: 6,
-          },
-          {
-            label: 'Count Untill 30 June 2023',
-            data: this.rowData3,
-            backgroundColor: ['#24B8FD'],
-            barPercentage: 1,
-            hoverBackgroundColor: ['#24B8FD'],
-            categoryPercentage: 0.5,
-            barThickness: 6,
-          },
-          {
-            label: 'Count Untill 30 September 2023',
-            data: this.rowData4,
-            backgroundColor: ['#0092D6'],
-            barPercentage: 1,
-            hoverBackgroundColor: ['#0092D6'],
-            categoryPercentage: 0.5,
-            barThickness: 6,
-          },
-          {
-            label: 'Count Untill 30 September 2023',
-            data: this.rowData5,
-            backgroundColor: ['#0072A7'],
-            barPercentage: 1,
-            hoverBackgroundColor: ['#0072A7'],
-            categoryPercentage: 0.5,
-            barThickness: 6,
-          },
-          {
-            label: 'Count Untill 30 September 2023',
-            data: this.rowData6,
-            backgroundColor: ['#004F74'],
-            barPercentage: 1,
-            hoverBackgroundColor: ['#004F74'],
-            categoryPercentage: 0.5,
-            barThickness: 6,
-          },
-        ],
+  VisualizebyDpt(data: any) {
+    const arr: Array<any> = [];
+    const resultArrays = [];
+
+    const cleanedData = JSON.parse(JSON.stringify(data), (key, value) =>
+      Array.isArray(value)
+        ? value.map((item) =>
+            typeof item === 'string' && !isNaN(Number(item))
+              ? Number(item)
+              : item
+          )
+        : value
+    );
+
+    console.log('modifiedData', cleanedData);
+
+    for (let i = 0; i < cleanedData.length; i++) {
+      let keysToSum = [
+        'Total Feature Count Untill 3 July 2022',
+        'Total Feature Count Untill 30 June 2023',
+        'Total Feature Count Untill 30 September 2023',
+        'Total Feature Count Untill 31 March 2023',
+        'New Features created from 4 July 2022 Untill 26 September 2023',
+        'Existing Features Updated from 4 July 2022 Untill 26 September 2023',
+      ];
+      let tempArray: any = [];
+      keysToSum.forEach((key, j) => {
+        if (Array.isArray(cleanedData[i][key])) {
+          tempArray.push(this.sumArray(cleanedData[i][key]));
+        }
+      });
+
+      let obj = {
+        label: cleanedData[i].department_name,
+        value: tempArray,
       };
+
+      this.dptValueArr.push(obj);
     }
 
+    
+
+    console.log('fff0', this.dptValueArr)
+
+
+
+    
+    
+  }
+
+  sumArray(arr: number[]): number {
+    return arr.reduce((sum, num) => sum + num, 0);
+  }
+
+  createChart() {
+
+    let data: any;
+    let dataSet: Array<any> = [];
+    const backGroundColor = [
+      '#16639B',
+      '#7A8762',
+      '#FF9422',
+      '#8D99FD',
+      '#D7EAA8',
+      '#FD635C',
+    ];
+
+    const borderColor = [
+      '#16639B',
+      '#7A8762',
+      '#FF9422',
+      '#8D99FD',
+      '#D7EAA8',
+      '#FD635C',
+    ]
+
+    this.dptValueArr.forEach((el, i) => {
+      dataSet.push({
+        label: this.totalLabel[i],
+        data: el.value,
+        backgroundColor: backGroundColor[i],
+
+        hoverBackgroundColor: backGroundColor[i],
+        // barThickness: 16,
+        // borderWidth: 1,
+          borderRadius: 3,
+          // borderColor: borderColor[i]
+      });
+    });
+    console.log('eeeee', dataSet);
+    this.dptLabelArr = this.dptValueArr.map((item) => item.label)
+
+    data = {
+      labels: this.dptLabelArr,
+      datasets: dataSet,
+    };
+    console.log('dddddddd', data);
+
     const config: any = {
-      type: 'bar', //this denotes tha type of chart
+      type: 'bar',
       data,
       options: {
-        // aspectRatio:2.5,
-        // indexAxis: 'y',
+        
+        barPercentage: 0.9,
+        categoryPercentage: 0.7,
+
         maintainAspectRatio: false,
 
         plugins: {
           legend: {
+            // position: 'bottom',
             title: {
               display: false,
-              // text: 'Current Week',
-              // position: 'start',
             },
             labels: {
               usePointStyle: true,
-              // padding: 300,
-              // color: 'red',
               font: {
-                size: 12,
+                size: 11,
                 family: 'Manrope',
               },
             },
@@ -292,31 +289,27 @@ export class StatisticsComponent {
             callbacks: {
               label: (tooltipItem: any): any => {
                 let label = tooltipItem.dataset.data[tooltipItem.dataIndex];
-                return 'revenu' + ' ' + label;
+                return 'Feature Count' + ': ' + label;
               },
             },
           },
           title: {
-            text: 'Revenue Weekly',
+            text: this.charTitle,
             display: true,
             align: 'start',
             color: '#595959',
             font: {
-              size: 12,
+              size: 13,
               family: 'Manrope',
             },
           },
         },
+
         scales: {
           x: {
-            // callback: function(label:any, index:any, labels:any) {
-            //   console.log(label)
-            // },
             ticks: {
-              // autoSkip: false,
-              // color: 'red',
               font: {
-                size: 7,
+                size: 11,
                 family: 'Manrope',
               },
             },
@@ -326,21 +319,11 @@ export class StatisticsComponent {
             },
           },
           y: {
-            // max: 800,
-            // display: this.barCurrentWeek.some(value => value !== 0) || this.barPreviousWeek.some(value => value !== 0),
+            // suggestedMax: 1200000,
             ticks: {
-              // crossAlign: 'far',
-              // mirror: true,
-              // padding: -10,
-              // callback: function (value: any, index: any) {
-              //   if (value.length === 0) {
-              //     return 'No Data';
-              //   } else {
-              //     let str = 'QAR';
-              //     return str + ' ' + value;
-              //   }
-
-              // },
+              callback: (value: any, index: any, values: any) => {
+                return value >= 1000 ? value / 1000 + 'k' : value;
+              },
               font: {
                 size: 11,
                 family: 'Manrope',
@@ -354,9 +337,25 @@ export class StatisticsComponent {
         },
       },
 
-      plugins: [],
+      plugins: [
+        {
+          id: 'legendMargin',
+          beforeInit: function (chart: Chart) {
+            if (chart.legend) {
+              const originalFit = (chart.legend as any).fit;
+
+              (chart.legend as any).fit = function fit() {
+                originalFit.bind(chart.legend)();
+                this.options.labels.padding = 18;
+                this.height += 5;
+              };
+            }
+          },
+        },
+      ],
     };
     this.chart = new Chart('MyChart', config);
+    
   }
 
   getColor(index: number): string {
@@ -375,16 +374,37 @@ export class StatisticsComponent {
 
   getlegendColor(index: number): string {
     const colors = [
-      '#FCDA8C',
+      '#16639B',
 
-      '#F5B391',
-      '#DD9AA9',
+      '#7A8762',
+      '#FF9422',
 
-      '#BB8DB5',
-      '#9884AE',
-      '#7F7F81',
+      '#8D99FD',
+      '#D7EAA8',
+      '#FD635C',
     ];
     return colors[index % colors.length];
+  }
+
+  getdpt(data: any) {
+    const cloneArr: Array<any> = JSON.parse(JSON.stringify(data));
+    const totalSectionCount = cloneArr.reduce(
+      (acc, obj) => {
+        const sections = acc.sections + obj.sections.length;
+        const features = acc.features + obj['f_count'];
+        return {
+          sections,
+          features,
+        };
+      },
+      { sections: 0, features: 0 }
+    );
+
+    this.totalCounts = [
+      { name: 'Departments', count: cloneArr.length },
+      { name: 'Sections', count: totalSectionCount.sections },
+      { name: 'Feature Layers', count: totalSectionCount.features },
+    ];
   }
 
   getObjectKeys(obj: any): string[] {
@@ -394,15 +414,173 @@ export class StatisticsComponent {
       return [];
     }
   }
+
+  onSelectionChange() {
+    if (this.selectedOption === 'department') {
+      this.dptValueArr = [];
+      this.dptLabelArr = [];
+      this.VisualizebyDpt(this.excelData)
+      let dataSet: Array<any> = [];
+      const backGroundColor = [
+        '#16639B',
+        '#7A8762',
+        '#FF9422',
+        '#8D99FD',
+        '#D7EAA8',
+        '#FD635C',
+      ];
+  
+      this.dptValueArr.forEach((el, i) => {
+        dataSet.push({
+          label: this.totalLabel[i],
+          data: el.value,
+          backgroundColor: backGroundColor[i],
+  
+          hoverBackgroundColor: backGroundColor[i],
+          // barThickness: 16,
+          borderRadius: 3,
+        });
+      });
+      this.charTitle = 'Departmental Feature Counts'
+      this.dptLabelArr = this.dptValueArr.map((item) => item.label)
+      this.chart.data.datasets = dataSet
+      this.chart.data.labels = this.dptLabelArr
+      this.chart.options.plugins.title.text = this.charTitle
+      this.chart.options.barPercentage = 0.9
+    this.chart.options.categoryPercentage = 0.7
+      this.chart.update()
+
+      
+    } else {
+      this.selectedDepartment = 'TRA-ROW'
+      this.charTitle = 'TRA-ROW (Features by Section)'
+     this.setDptNum(0)
+
+      // this.chart.update()
+
+      // this.createChart()
+    }
+  }
+
+  onDepartmentChange() {
+    console.log('Selected Department:', this.selectedDepartment);
+    switch(this.selectedDepartment)
+    {
+      case 'TRA-ROW':
+        this.charTitle = 'TRA-ROW (Features by Section)'
+        this.setDptNum(0)
+        break;
+        case 'TRA-ITS':
+          this.charTitle = 'TRA-ITS (Features by Section)'
+          this.setDptNum(1)
+          break;
+          case 'TRA-PRK':
+            this.charTitle = 'TRA-PRK (Features by Section)'
+            this.setDptNum(2)
+        break;
+        case 'RFM':
+          this.charTitle = 'RFM (Features by Section)'
+          this.setDptNum(3)
+        break;
+        case 'TRA-ROADS':
+          this.charTitle = 'TRA-ROADS (Features by Section)'
+          this.setDptNum(4)
+        break;
+        case 'TRA-TRAF':
+          this.charTitle = 'TRA-TRAF (Features by Section)'
+          this.setDptNum(5)
+        
+
+    }
+    // You can perform additional actions based on the selected department
+  }
+
+  handlePanel() {
+    this.genderIsOpen = !this.genderIsOpen;
+  }
+
+  getTotalCount(totalCount: any) {
+    let lable: Array<any> = [];
+    for (const [key, value] of Object.entries(totalCount)) {
+      lable.push(key);
+      this.totalValue.push(value);
+    }
+    this.totalLabel = this.shortenLegend(lable);
+    console.log('newlabel', this.totalLabel);
+    console.log('totalvalue', this.totalValue);
+  }
+
+  shortenLegend(legend: any) {
+    const shortenedLegend = legend.map((item: any) => {
+      const parts = item.split(' ');
+      const featureType = parts[0];
+
+      switch (featureType) {
+        case 'Existing':
+          return 'Updated as of ' + parts.slice(5).join(' ');
+        case 'New':
+          return 'New as of ' + parts.slice(5).join(' ');
+        case 'Total':
+          return 'As of ' + parts.slice(4).join(' ');
+        default:
+          return item;
+      }
+    });
+
+    return shortenedLegend;
+  }
+
+  setDptNum(index:any)
+  {
+    this.dptValueArr = [];
+    this.dptLabelArr = [];
+    let dataSet: Array<any> = [];
+    const backGroundColor = [
+      '#16639B',
+      '#7A8762',
+      '#FF9422',
+      '#8D99FD',
+      '#D7EAA8',
+      '#FD635C',
+    ];
+    const dptName = this.excelData[index];
+    this.dptLabelArr = dptName.sections.map((item:any) => item.name)
+    this.dptValueArr = [
+      dptName['Total Feature Count Untill 3 July 2022'],
+      dptName['Total Feature Count Untill 31 March 2023'],
+      dptName['Total Feature Count Untill 30 June 2023'],
+      dptName['Total Feature Count Untill 30 September 2023'],
+      dptName['New Features created from 4 July 2022 Untill 26 September 2023'],
+      dptName['Existing Features Updated from 4 July 2022 Untill 26 September 2023']
+    ];
+    console.log('sec', this.dptValueArr);
+    console.log('checkdataaaaa', this.chart.data)
+
+    this.dptValueArr.forEach((el, i) => {
+      
+      dataSet.push({
+        label: this.totalLabel[i],
+        data: el,
+        backgroundColor: backGroundColor[i],
+
+        hoverBackgroundColor: backGroundColor[i],
+        // barThickness: 16,
+        borderRadius: 3,
+      });
+    });
+    console.log('eeeee', dataSet);
+    console.log('ffccccc', this.dptLabelArr)
+    
+  
+    
+    this.chart.data.datasets = dataSet
+    this.chart.data.labels = this.dptLabelArr
+    this.chart.options.plugins.title.text = this.charTitle
+    
+    this.chart.options.barPercentage = 0.9
+    this.chart.options.categoryPercentage = 0.7
+    
+    this.chart.update()
+  
+  }
 }
-
-// const colors = [
-//   '#CE016A',
-
-//   '#4B955F',
-//   '#33CCCC',
-
-//   '#F9A037',
-//   '#0071BC',
-//   '#7B33FA',
-// ];

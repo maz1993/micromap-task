@@ -7,11 +7,10 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class ExcelServiceService {
-  // private dataSubject = new BehaviorSubject<any>(null);
-  // public data$ = this.dataSubject.asObservable();
+
 
   constructor(private http: HttpClient) {
-    console.log('sdasdsa');
+    
   }
 
   readExcelFile(): Promise<any> {
@@ -32,7 +31,7 @@ export class ExcelServiceService {
           // console.log(jsonData);
 
           const processedData = this.processData(jsonData);
-
+          // console.log(processedData);
           resolve(processedData);
         },
         (error) => {
@@ -52,164 +51,7 @@ export class ExcelServiceService {
   }
 
   private async processData(data: any) {
-    //     var tempArray = [];
-
-    //     await data.shift();
-
-    //     //  console.log('modified data array length: ', data.length)
-
-    //     // remove unwanted columns
-    //     for (var i = 0; i < data.length; i++) {
-    //       data[i].splice(0, 1);
-    //       data[i].splice(2, 1);
-    //       const tempLength = data[i].length;
-    //       data[i].splice(tempLength - 1, 1);
-    //       data[i].splice(tempLength - 2, 1);
-    //       // console.log('modified data array: ', data[i])
-    //     }
-    //     // console.log('modified data array: ', data)
-
-    //     var tempDepartments = [];
-    //     for (var i = 1; i < data.length; i++) {
-    //       // each array in temarr
-    //       const tempArr = data[i];
-
-    //       const department = tempArr[0];
-
-    //       var lastSavedDepartment: any = '';
-
-    //       if (tempDepartments.length == 0) {
-    //         const firstObj = {
-    //           department_name: department,
-    //           department_start_index: 0,
-    //           department_last_index: 0,
-    //         };
-    //         tempDepartments.push(firstObj);
-    //       } else {
-    //         lastSavedDepartment = tempDepartments[tempDepartments.length - 1];
-
-    //         if (department != '') {
-    //           if (department != lastSavedDepartment) {
-    //             lastSavedDepartment.department_last_index = i - 2;
-    //             const obj: any = {
-    //               department_name: department,
-    //               department_start_index:
-    //                 tempDepartments[tempDepartments.length - 1]
-    //                   .department_last_index + 1,
-    //               department_last_index: i - 2,
-    //             };
-    //             tempDepartments.push(obj);
-    //           }
-    //         }
-    //       }
-    //     }
-    //     tempDepartments[tempDepartments.length - 1].department_start_index =
-    //       tempDepartments[tempDepartments.length - 1].department_start_index + 2;
-
-    //     tempDepartments[tempDepartments.length - 1].department_last_index =
-    //       data.length - 7;
-
-    //     // console.log('departments length', tempDepartments.length)
-
-    //     for (var i = 0; i < tempDepartments.length; i++) {
-    //       var tempSections = [];
-
-    //       const startIndex = tempDepartments[i].department_start_index;
-    //       const lastIndex = tempDepartments[i].department_last_index;
-
-    //       for (var j = startIndex + 1; j <= lastIndex + 1; j++) {
-    //         var tempData: any = 0;
-
-    //         var value: any = 0;
-
-    //         if (i == tempDepartments.length - 1) {
-    //           tempData = data[j - 2];
-    //           value = tempData[1];
-    //         } else {
-    //           tempData = data[j];
-    //           value = tempData[1];
-    //         }
-    //         // console.log('temp data', tempData)
-    //         if (value != '') {
-    //           tempSections.push(value);
-    //         }
-    //       }
-    //       //   console.log('sections:', tempSections)
-    //       tempDepartments[i].sections = tempSections;
-    //       //   tempDepartments.push({sections:tempSections})
-    //     }
-
-    //     var headings = data[0];
-    //     for (var k = 0; k < tempDepartments.length; k++) {
-    //       //   var arr ="";
-    //       for (var i = 2; i < headings.length; i++) {
-    //         const arr = headings[i];
-    //         tempDepartments[k][arr] = [];
-    //       }
-    //     }
-    //     // debugger
-    //     for (var i = 0; i < tempDepartments.length; i++) {
-    //       var tempSections = [];
-
-    //       const startIndex = tempDepartments[i].department_start_index;
-    //       const lastIndex = tempDepartments[i].department_last_index;
-
-    //       for (var m = 2; m < headings.length; m++) {
-    //         //get index
-    //         const firstHeading = headings[m];
-    //         // console.log('item found', firstHeading)
-    //         var index = -1;
-    //         var firstItem = data[0];
-    //         // console.log('first array', firstItem)
-    //         for (var l = 0; l < firstItem.length; l++) {
-    //           if (firstHeading == firstItem[l]) {
-    //             index = l;
-    //             break;
-    //           }
-    //         }
-    //         //  console.log('temp index', index)
-    //         var array = [];
-    //         for (var j = startIndex + 1; j <= lastIndex + 1; j++) {
-    //           var tempData = null;
-    //           // console.log('temp data', tempData)
-
-    //           if (i == tempDepartments.length - 1) {
-    //             tempData = data[j - 2];
-    //             array.push(tempData[index]);
-    //           } else {
-    //             tempData = data[j];
-    //             array.push(tempData[index]);
-    //           }
-
-    //           tempDepartments[i][firstHeading] = array;
-    //         }
-    //       }
-    //     }
-    //     var finalData = {
-    //       'departments' : tempDepartments,
-    //       'total' : null
-    //   }
-
-    //  var totalData:any ={};
-    //  var item =  data[data.length-6];
-    //  // console.log('item', item)
-
-    //  for(var i=4; i< headings.length; i++){
-    //      const keyName = headings[i]
-    //      const value = item[i]
-
-    //      totalData[keyName] = value
-    //  }
-    //  finalData.total = totalData
-    //  console.log('departments', finalData)
-
-    // localStorage.setItem('excelData', JSON.stringify(finalData.departments))
-
     var tempArray = [];
-
-    await data.shift();
-
-    //  console.log('modified data array length: ', data)
 
     for (var i = 0; i < data.length; i++) {
       data[i].splice(0, 1);
@@ -219,20 +61,20 @@ export class ExcelServiceService {
       data[i].splice(tempLength - 2, 1);
       // console.log('modified data array: ', data[i])
     }
-    console.log('modified data array: ', data[161]);
+    // console.log('data array length: ', data)
 
     var tempDepartments = [];
     for (var i = 1; i < data.length; i++) {
       const tempArr = data[i];
-
       const department = tempArr[0];
+      // console.log('department name', department)
 
       var lastSavedDepartment: any = '';
 
       if (tempDepartments.length == 0) {
         const firstObj = {
           department_name: department,
-          department_start_index: 0,
+          department_start_index: 1,
           department_last_index: 0,
         };
         tempDepartments.push(firstObj);
@@ -242,13 +84,13 @@ export class ExcelServiceService {
 
         if (department != '') {
           if (department != lastSavedDepartment) {
-            lastSavedDepartment.department_last_index = i - 2;
+            lastSavedDepartment.department_last_index = i - 1;
             const obj: any = {
               department_name: department,
               department_start_index:
                 tempDepartments[tempDepartments.length - 1]
                   .department_last_index + 1,
-              department_last_index: i - 2,
+              department_last_index: i - 1,
             };
             tempDepartments.push(obj);
           }
@@ -257,9 +99,9 @@ export class ExcelServiceService {
     }
 
     tempDepartments[tempDepartments.length - 1].department_last_index =
-      data.length;
+      data.length - 2;
 
-    // console.log('departments length', tempDepartments.length)
+    // console.log('departments length', tempDepartments)
 
     for (var i = 0; i < tempDepartments.length; i++) {
       var tempSections = [];
@@ -267,45 +109,35 @@ export class ExcelServiceService {
       const startIndex = tempDepartments[i].department_start_index;
       const lastIndex = tempDepartments[i].department_last_index;
 
-      for (var j = startIndex + 1; j <= lastIndex + 1; j++) {
+      for (var j = startIndex; j <= lastIndex; j++) {
         var tempData: any = 0;
 
         var value: any = 0;
 
         if (i == tempDepartments.length - 1) {
-          tempData = data[j - 2];
+          tempData = data[j];
           value = tempData[1];
         } else {
           tempData = data[j];
           value = tempData[1];
         }
 
-        // console.log('temp data', tempData)
         if (value != '') {
-          //   const object = {
-          //       name: value,
-          //       first_index : startIndex+1,
-          //       last_index : j
-          //   }
-
-          //   tempSections.push(object)
-
           var lastSavedSection: any = '';
 
           if (tempSections.length == 0) {
             const firstObj = {
               name: value,
-              first_index: startIndex + 1,
+              first_index: startIndex,
               last_index: 0,
             };
             tempSections.push(firstObj);
           } else {
             lastSavedSection = tempSections[tempSections.length - 1];
 
-            // console.log('last saved section: ', value, j)
-
             if (value != '') {
               if (value != lastSavedSection) {
+                // console.log('last index: ', j)
                 lastSavedSection.last_index = j - 1;
 
                 var tempLastValue = j - 1;
@@ -325,20 +157,16 @@ export class ExcelServiceService {
           }
         }
         if (j == lastIndex) {
-          tempSections[tempSections.length - 1].last_index = j + 1;
+          //   console.log('last index: ', lastIndex)
+          tempSections[tempSections.length - 1].last_index = j;
         }
       }
 
-      //   console.log('sections:', tempSections)
       tempDepartments[i].sections = tempSections;
-
-      //   tempDepartments.push({sections:tempSections})
+      //  console.log('temp sections' ,tempDepartments[i].sections)
     }
 
-    tempDepartments[tempDepartments.length - 1].sections[0].last_index = 161;
-    tempDepartments[tempDepartments.length - 1].sections[1].first_index = 162;
-    tempDepartments[tempDepartments.length - 1].sections[1].last_index = 166;
-    // console.log('temp sections' ,)
+    // console.log('temp sections' ,tempDepartments)
 
     var headings = data[0];
     for (var k = 0; k < tempDepartments.length; k++) {
@@ -357,7 +185,6 @@ export class ExcelServiceService {
       const lastIndex = tempDepartments[i].department_last_index;
 
       for (var m = 2; m < headings.length; m++) {
-        //get index
         const firstHeading = headings[m];
         // console.log('item found', firstHeading)
         var index = -1;
@@ -390,7 +217,7 @@ export class ExcelServiceService {
 
                 var tempVale = '';
                 if (index == 4) {
-                  console.log('get value', value);
+                  // console.log('get value', value)
                 }
 
                 if (value == '-') {
@@ -414,7 +241,7 @@ export class ExcelServiceService {
             const firstIndex = totalSections[g].first_index;
             const lastIndex = totalSections[g].last_index;
             //  console.log('first index',firstIndex )
-            //  console.log('last index' ,lastIndex )
+            //  console.log('last index',lastIndex )
             var totalCount: any = 0;
             for (var h = firstIndex; h <= lastIndex; h++) {
               tempData = data[h];
@@ -441,8 +268,6 @@ export class ExcelServiceService {
           //  tempData = data[j]
           //     array.push(tempData[index])
         }
-
-        //not using now
         for (var j = startIndex + 1; j <= lastIndex + 1; j++) {
           var tempData = null;
           // console.log('temp data', tempData)
@@ -461,15 +286,15 @@ export class ExcelServiceService {
       }
     }
 
-    console.log('departments', tempDepartments[tempDepartments.length - 1]);
+    // console.log('departments', tempDepartments)
 
-    var finalData: any = {
+    var finalData = {
       departments: tempDepartments,
       total: null,
     };
 
     var totalData: any = {};
-    var item = data[data.length - 6];
+    var item = data[data.length - 1];
     // console.log('item', item)
 
     for (var i = 4; i < headings.length; i++) {
@@ -477,9 +302,10 @@ export class ExcelServiceService {
       const value = item[i];
 
       totalData[keyName] = value;
+      // console.log('key name',keyName)
     }
     finalData.total = totalData;
-    // console.log(JSON.stringify(finalData))
+    // console.log(finalData);
 
     return finalData;
   }

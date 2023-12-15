@@ -1,27 +1,14 @@
-<!-- <div  class="col-4 ms-5 mt-5">
-    <mat-card class="mat-elevation-z2 me-3" style="height: 300px">
-      <canvas class="mx-4" style="height: 350px"
-        id="MyChart"
-        
-        >
-      </canvas>
-    </mat-card>
-  </div> -->
+<div class="vh-100">
+  <div class="header d-flex align-items-center">
+    <span class="heading">{{
+      switchView === true ? "TRA Statistics Dashboard" : "Other Info"
+    }}</span>
+  </div>
 
-  <!-- <div> -->
-    <!-- <div> -->
-      
-        <div class="header d-flex flex-row align-items-center justify-content-between  ">
-            <span class="heading">{{switchView === true ? 'TRA Statistics Dashboard' : 'Other Info'}}</span>
-            <!-- <button (click)="onChangeView()"  type="button" class="btn btn-info me-3">{{switchView === true ? 'Other Info' : 'Statistics'}}</button> -->
-          </div>
-          <!-- <ng-container *ngIf="switchView" > -->
-          <app-statistics></app-statistics>
-      
-      <!-- </ng-container> -->
-
-      <!-- <ng-container *ngIf="!switchView">
-        <app-other-info></app-other-info>
-
-      </ng-container> -->
-   
+  <div class="main-container">
+    <app-statistics
+      class="d-flex row gx-0 h-100"
+      style="font-family: Manrope"
+    ></app-statistics>
+  </div>
+</div>
